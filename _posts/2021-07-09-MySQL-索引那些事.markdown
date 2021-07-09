@@ -13,4 +13,5 @@ select * from employees where emp_no = 401060;
 ```
 
 查询结果如下：
-image-20200828165305889.png<img width="636" alt="image-20200828165305889" src="https://user-images.githubusercontent.com/1639828/125062615-2d777900-e0e1-11eb-8dd6-0151bb4292ef.png">
+
+<img width="636" alt="image-20200828165305889" src="https://user-images.githubusercontent.com/1639828/125062615-2d777900-e0e1-11eb-8dd6-0151bb4292ef.png">
