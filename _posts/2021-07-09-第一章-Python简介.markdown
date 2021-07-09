@@ -4,3 +4,105 @@ title:  "第一章 Python 简介"
 date:   2021-07-09 16:52:28 +0800
 categories: jekyll update
 ---
+## 1 Python 是什么？
+
+介绍 Python 之前，先来介绍下什么是编程语言。要让计算机为我们干活，需要给计算机下指令，编程语言便是用来编写让计算机干活的指令的语言。举个做菜的例子，假设现在需要厨师做一道西红柿炒鸡蛋，在这里厨师便相当于计算机，菜谱便相当于给计算机下的指令，计算机依据我们下达的指令来完成某项任务便相当于厨师依据菜谱做出西红柿炒鸡蛋这道菜。
+
+<img width="1014" alt="介绍5" src="https://user-images.githubusercontent.com/1639828/125059454-ed62c700-e0dd-11eb-9ee9-5b98d9b03b8e.png">
+
+Python 是一种编程语言，它是吉多·范罗苏姆（Guido van Rossum）在 1989 年的圣诞节期间，为了打发时间而编写的一个编程语言。（牛人就是牛人，打发时间的空隙可以开发出一门语言）。
+
+<img width="1013" alt="创始人" src="https://user-images.githubusercontent.com/1639828/125060157-a4f7d900-e0de-11eb-9a6b-ac9f7c5e7b6f.png">
+
+之所以选中 Python 作为编程的名字，是因为他是 BBC 电视剧——《蒙提·派森的飞行马戏团》（Monty Python's Flying Circus）的爱好者。
+
+Python 是一种易于学习又功能强大的编程语言。它提供了高效的高级数据结构，还能简单有效地面向对象编程。Python 优雅的语法和动态类型，以及解释型语言的本质，使它成为多数平台上写脚本和快速开发应用的理想语言。
+
+Python 解释器及丰富的标准库，提供了适用于各个主要系统平台的源码或机器码，这些可以到 Python 官网 https://www.python.org/ 免费获取，并可自由地分发。许多免费的第三方 Python 模块、程序、工具和它们的文档，也能在这个网站上找到对应内容或链接。
+
+Python 解释器易于扩展，可以使用 C 或 C++ 扩展新的功能和数据类型。
+
+近年来，Python 得到了越来越广泛的应用。从 TIOBE 语言排行榜的趋势可见一斑。2018 年以来，Python 的排行一直处于上升的趋势。
+
+<img width="928" alt="趋势" src="https://user-images.githubusercontent.com/1639828/125060253-c22ca780-e0de-11eb-8356-734fd9671629.png">
+
+## 2 Python 能干什么？
+Python 拥有强大的生态，使得它能够在很多领域得到广泛的应用，下图是 Python 可以应用的一些典型的领域。
+
+<img width="1011" alt="更改1" src="https://user-images.githubusercontent.com/1639828/125060390-e8524780-e0de-11eb-9feb-e1cef213a98b.png">
+
+Python 不但应用领域广泛，而且得到众多大厂的青睐，下图中的 10 家公司都大量地使用 Python 语言。
+
+<img width="1012" alt="大厂" src="https://user-images.githubusercontent.com/1639828/125060449-f99b5400-e0de-11eb-9e88-10910d918f49.png">
+
+既然这么多大厂都在大量地使用 Python，所以学好了 Python，不愁找不到好的工作。
+
+## 3 Python 之禅
+Python 的设计哲学强调代码的可读性和简洁的语法，尤其是使用空格缩进划分代码块。相比于 Java，Python 让开发者能够用更少的代码表达想法。不管是小型还是大型程序，该语言都试图让程序的结构清晰明了。下面的 Python 之禅（The Zen of Python）列出了 Python 所提倡的一些编程理念（进入到 Python 的命令行界面，输入 `import this` 便可以看到下面的文字）。Python 之禅的内容其实已经超越了编程语言的范畴，它所提倡的一些理念在现实生活中同样适用。
+> Beautiful is better than ugly.
+> 优美优于丑陋。
+> 
+> Explicit is better than implicit.
+> 明了优于隐晦。
+> 
+> Simple is better than complex.
+> 简单优于复杂。
+> 
+> Complex is better than complicated.
+> 复杂优于错综复杂。
+> 
+> Flat is better than nested.
+> 扁平优于嵌套。
+> 
+> Sparse is better than dense.
+> 稀疏优于稠密。
+> 
+> Readability counts.
+> 可读性很重要。
+> 
+> Special cases aren't special enough to break the rules.
+> 特殊情况也不应该违反这些规则。
+> 
+> Although practicality beats purity.
+> 但现实往往并不那么完美。
+> 
+> Errors should never pass silently.
+> 异常不应该被静默处理。
+> 
+> Unless explicitly silenced.
+> 除非你希望如此。
+> 
+> In the face of ambiguity, refuse the temptation to guess.
+> 遇到模棱两可的地方，不要胡乱猜测。
+> 
+> There should be one-- and preferably only one --obvious way to do it.
+> 肯定有一种通常也是唯一一种最佳的解决方案。
+> 
+> Although that way may not be obvious at first unless you're Dutch.
+> 虽然这种方案并不是显而易见的，因为你不是那个荷兰人[这里指的是 Python 之父 Guido]。
+> 
+> Now is better than never.
+> 现在开始做比不做好。
+> 
+> Although never is often better than *right* now.
+> 不做比盲目去做好。
+> 
+> If the implementation is hard to explain, it's a bad idea.
+> 如果一个实现方案难于理解，它就不是一个好的方案。
+> 
+> If the implementation is easy to explain, it may be a good idea.
+> 如果一个实现方案易于理解，它很有可能是一个好的方案。
+> 
+> Namespaces are one honking great idea -- let's do more of those!
+> 命名空间非常有用，我们应当多加利用。
+
+## 4 打印歌词
+对 Python 编程语言有了基本的了解之后，我们来看如何使用 Python 提供的 print 函数将内容打印到屏幕上。
+```python
+print("Twinkle, twinkle, little star, \n\tHow I wonder what you are! \n\t\tUp above the world so high, \n\t\tLike a diamond in the sky. \nTwinkle, twinkle, little star, \n\tHow I wonder what you are!")
+```
+
+print()函数的介绍。
+
+## 5 小结
+<img width="1081" alt="总结" src="https://user-images.githubusercontent.com/1639828/125060998-7af2e680-e0df-11eb-8b7f-4bf7dca4ed6c.png">
