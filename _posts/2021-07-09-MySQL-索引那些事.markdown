@@ -4,3 +4,13 @@ title:  "MySQL 索引那些事"
 date:   2021-07-09 18:09:28 +0800
 categories: jekyll update
 ---
+### 索引初识
+
+首先通过一个例子来直观认识下索引对查询效率的提升。例子中使用的表为 employees（建表语句见附录）。在为 emp_no 字段加索引之前，查询  emp_no 为 401060 的职员信息，sql 如下：
+
+```sql
+select * from employees where emp_no = 401060;
+```
+
+查询结果如下：
+image-20200828165305889.png<img width="636" alt="image-20200828165305889" src="https://user-images.githubusercontent.com/1639828/125062615-2d777900-e0e1-11eb-8dd6-0151bb4292ef.png">
