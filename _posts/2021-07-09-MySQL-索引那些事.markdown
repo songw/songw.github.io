@@ -15,3 +15,442 @@ select * from employees where emp_no = 401060;
 查询结果如下：
 
 <img width="636" alt="image-20200828165305889" src="https://user-images.githubusercontent.com/1639828/125062615-2d777900-e0e1-11eb-8dd6-0151bb4292ef.png">
+
+运行时间如下：
+
+<img width="587" alt="image-20200901153111184" src="https://user-images.githubusercontent.com/1639828/125094539-ecde2680-e105-11eb-9e51-d14f72e35589.png">
+
+在为 emp_no 字段加索引之后，再重新执行如下 sql ：
+
+```sql
+select * from employees where emp_no = 401060;
+```
+
+查询结果如下：
+
+<img width="638" alt="image-20200828165608635" src="https://user-images.githubusercontent.com/1639828/125094792-2020b580-e106-11eb-9334-4d89aa05f932.png">
+
+运行时间如下：
+
+<img width="586" alt="image-20200901153235270" src="https://user-images.githubusercontent.com/1639828/125094870-3464b280-e106-11eb-8b5a-404abe1785dd.png">
+
+从前后的运行时间对比可以看出，加索引之后，查询效率有了千倍的提升。那么索引到底是什么？为什么能够提高查询效率呢？
+
+现在以查词典为例来说明下索引的作用。小学的时候，我们都学过怎么查词典。比如，要查找**索**字，可以先通过拼音查找到**索**字在那一页。如下图所示：
+
+<img width="657" alt="image-20200827235744290" src="https://user-images.githubusercontent.com/1639828/125094976-4ba3a000-e106-11eb-9b2f-970b5a85d727.png">
+
+然后再到相应的页中去查找**索**字。
+
+<img width="699" alt="image-20200828000055342" src="https://user-images.githubusercontent.com/1639828/125095043-5e1dd980-e106-11eb-81a8-2944cbceacae.png">
+
+这样便可以很快找到相应的字，比把词典从头翻到尾快多了，这里的拼音目录便相当于数据库表中的索引。
+
+### 数据库的索引
+
+#### 二叉查找树
+
+那么数据库表中的索引是怎么实现的呢？其实，数据库表中的索引就是一种数据结构。以 MySQL 的 InnoDB 存储引擎为例，它使用的数据结构是 B+ 树。为什么使用 B+ 树这种数据结构呢？
+
+在讲解 B+ 树之前，先来介绍下二分查找法。二分查找法也称为折半查找法，用来查找一组**有序记录**中的某一项记录。其基本思想是，先将要查找的记录值和有序数列中位于中间点位置的记录值进行比较，如果小于位于中间点位置记录的值，则要查找的记录值在数列的左半部分，否则为右半部分。这样通过一次查找便可以将查找区间缩小一半。例如，我们有 3、5、8、13、21、34、55、89、144、233 十个数，假设我们要查找 144 这个数字，其查找过程如下图所示：
+
+<img width="1155" alt="image-20200828105724698" src="https://user-images.githubusercontent.com/1639828/125095154-78f04e00-e106-11eb-9200-d28f0614a198.png">
+
+从图中可以看出，使用三次比较就找到了 144 这个数，如果用顺序查找则需要 9 次。基于上面 10 个数字，如果用顺序查找，则平均查找次数为 （1 + 2 + 3 + 4 + 5 + 6 + 7 + 8 + 9 + 10）/ 10 = 5.5 次。二分查找的平均查找次数为 （4 + 3 + 2 + 4 + 3 + 1 + 4 + 3 + 2 + 3）/ 10 = 2.9 次。二分查找具有查找速度快、平均性能好的优点，但是要求待查表为有序表，当要向表中插入或删除记录时，代价比较高。这样便出现了二叉查找树。对于上面的 10 个数字，假如数字的顺序为 21、5、89、3、8、34、144、13、55、233 可以构建如下二叉查找树：
+
+<img width="876" alt="image-20200828133905758" src="https://user-images.githubusercontent.com/1639828/125095221-89a0c400-e106-11eb-99cd-5a187e694803.png">
+
+假设要查找的数值为 a，则在上述二叉查找树中的查找步骤为：
+
+1. 如果 a 大于根节点，则在右子树中进行查找。
+2. 如果 a 小于根节点，则在左子树中进行查找。
+3. 如果 a 等于根节点，也就是找到了这个节点，返回根节点即可。
+
+在上述这个二叉树中查找值的最大比较次数为 4 次，这属于比较理想情况，查询的时间复杂度为 O(logn)。假如给出的数字顺序为 3、5、8、13、21、34、55、89、144、233，则构造的二叉查找树如下：
+
+<img width="850" alt="image-20200828140356269" src="https://user-images.githubusercontent.com/1639828/125095303-a0471b00-e106-11eb-95b0-3375f2684def.png">
+
+这时候二叉查找树已经退化成了一条链表，查找数据的时间复杂度变成了 O(n)。为了解决这个问题，提出了平衡二叉查找树（AVL 树），它在二叉查找树的基础上增加了约束，每个节点的左子树和右子树的高度差不能超过 1。刚才构建的第一棵二叉树便属于平衡二叉查找树。
+
+现在有了平衡二叉树，是不是就意味着可以使用平衡二叉树来作为索引的存储结构呢？非也！原因是，索引不止存在于内存中，还要写在磁盘上。假设某个数据表有 100 万行数据，如果使用平衡二叉树来建索引，则得到的平衡二叉树树高为 20。一次查询可能需要访问 20 个数据块，也就是有可能会有 20 次磁盘 IO。当前的机械磁盘一次 IO 的大概时间为 10ms，20 次磁盘 IO 的时间为 200 ms。也就是说，对于一个 100 万行的表，如果使用二叉树来存储，单独访问一个行可能需要 200 ms，这个时间是不能接受的。为了减少磁盘 IO，需要降低树的高度，让树变的更“矮胖”，为了让树变”矮胖“，需要增加每个节点的子节点的数目，这便是 M 叉树（M > 2）。还以刚才的 100 万行数据为例，如果 M = 10，则这时的树高为 4 。考虑到树根的数据块总是在内存中，查找一个值最多只需访问 3 次磁盘。其实，树的第二层也有很大概率在内存中，那么访问磁盘的平均次数就更少了。M 叉树由于在读写上的性能优点，以及适配磁盘的访问模式，已经被广泛应用在数据库引擎中了。
+
+#### B 树
+
+B 树便是 M 叉树的一种，B 树的结构如下图所示：
+
+<img width="1714" alt="image-20200901170752834" src="https://user-images.githubusercontent.com/1639828/125095433-bce35300-e106-11eb-9612-7ad7b6eecced.png">
+
+B 树作为平衡的多路搜索树，它的每一个节点最多可以包含 M 个子节点，M 称为 B 树的阶。每个磁盘块中包括了关键字和子节点的指针。如果一个磁盘块包含了 N 个关键字，那么指针数就是 N + 1。一个 M 阶的 B 树（M > 2）有以下的特性：
+
+1. 根节点的儿子数的范围是 [2, M]。
+2. 每个中间节点包含 k - 1 个关键字和 k 个孩子，孩子的数量 = 关键字的数量 + 1，k 的取值范围为 [ceil(M/2), M]。
+3. 叶子节点包含 k - 1 个关键字（叶子节点没有孩子），k 的取值范围为 [ceil(M/2), M]。
+4. 假设中间节点的关键字为：key[1], key[2], ..., key[k - 1]，且关键字按照升序排序，即 k[i] < k[i + 1]。此时 k - 1 个关键字相当于划分了 k 个范围，也就是对应着 k 个指针，即为：P[1], P[2], ..., P[k]，其中 P[1] 指向关键字小于 key[1] 的子树，P[i] 指向关键字属于 （key[i-1], key[i]）的子树，P[k] 指向关键字大于 key[k-1] 的子树。
+5. 所有叶子节点位于同一层。
+
+现在我们来看下如何用 B 树进行查找，假设我们要查找关键字 36，则查找步骤如下：
+
+1. 将 36 与根节点比较，36 大于 35 得到指针 P3。
+2. 根据指针 P3 找到磁盘块 4，36 小于 65 得到指针 P1。
+3. 根据指针 P1 找到磁盘块 6，然后找到了关键字 36。
+
+从查询的过程可以看出，B 树相对于平衡二叉树来说磁盘 I/O 操作更少，在数据查询中比平衡二叉树效率要高。
+
+#### B+ 树
+
+B+ 树是对 B 树的改进，B+ 树和 B 树的差异在以下几点：
+
+1. 有 k 个孩子的节点就有 k 个关键字。
+2. 非叶子节点的关键字也会同时存在于子节点中，并且是在子节点中所有关键字的最大或最小。
+3. 非叶子节点仅用于索引，不保存数据记录，跟记录有关的信息都放在叶子节点中。
+4. 所有关键字都在叶子节点出现，叶子节点构成一个有序链表，而且叶子节点本身按照关键字的大小从小到大顺序链接。
+
+下面便是一棵 B+ 树：
+
+<img width="1172" alt="image-20200901180309082" src="https://user-images.githubusercontent.com/1639828/125095992-4dba2e80-e107-11eb-94f4-062e6d33c5dd.png">
+
+假如我们要查找关键字 60，则查找过程为：
+
+1. 与根节点进行比较，得到指针 P2。
+2. 顺着指针 P2 来到磁盘块3，与磁盘块 3 中的关键字进行比较，得到指针 P3。
+3. 顺着指针 P3 来到磁盘块10，与磁盘块 10 中的关键字进行比较，找到关键字 60。
+
+从查询过程来看，B+ 树和 B 树差不多，但是 B+ 树和 B 树的根本差异在于，B+ 树的中间节点不直接存储数据。这样做的好处是：
+
+1. B+ 树查询效率更稳定，因为每次只有访问到叶子节点才能找到对应的数据，而在 B 树中，非叶子节点也会存储数据，这样就会造成查询效率不稳定的情况，有时候访问到了非叶子节点就可以找到关键字，有时候需要访问到叶子节点才能找到关键字。
+2. B+ 树的查询效率更高，因为 B+ 树通常比 B 树更矮胖，查询所需的磁盘 I/O 也会更少。同样的磁盘页大小，B+ 树可以存储更多的节点关键字。
+
+### 聚簇索引和非聚簇索引
+
+聚簇索引是按照每张表的主键构造的一棵 B+ 树，叶子节点中存放的即为整张表的行记录数据，聚簇索引的叶子节点也称为数据页。非聚簇索引叶子节点并不包含行记录的全部数据。叶子节点除了包含键值以外，每个叶子节点中的索引行中还包含一个书签。该书签用来告诉 InnoDB 存储引擎哪里可以找到与索引相对应的行数据。由于 InnoDB 存储引擎表是索引组织表，因此 InnoDB 存储引擎的非聚簇索引的书签就是相应的行数据的聚簇索引键。那么基于聚簇索引和非聚簇索引的查询的区别在哪里呢？先通过一个例子来直观感受下：查询 emp_no 为 401060 的记录，通过字段 emp_no 来查询，sql 如下。
+
+```sql
+select * from employees where emp_no = 401060;
+```
+
+查询结果如下：
+
+<img width="640" alt="image-20200830232207672" src="https://user-images.githubusercontent.com/1639828/125096095-632f5880-e107-11eb-99ba-b67f4780cb19.png">
+
+通过字段 id 来查询，sql 如下：
+
+```sql
+select * from employees where id = 201085;
+```
+
+查询结果如下：
+
+<img width="638" alt="image-20200830232223312" src="https://user-images.githubusercontent.com/1639828/125096173-76422880-e107-11eb-8156-406be46f77ba.png">
+
+两种查询方式的耗时如下：
+
+<img width="592" alt="image-20200830232253255" src="https://user-images.githubusercontent.com/1639828/125096233-865a0800-e107-11eb-990d-2df84b210e2f.png">
+
+从上面的结果，可以看出，两种查询方式的结果是相同的，但是基于聚簇索引的查询要快于基于非聚簇索引的查询。同样是基于索引的查询，查询结果也是相同的，那为什么查询效率不一样呢？举个例子来说明下，假设有数据表 T，表中包含三个字段 id、emp_no 和 gender，id 为主键，并且在 k 上有索引。表中 R1~R5 的值分别为(3, 300, "M")、(5, 500, "M")、(8, 800, "F")、(13, 1300, "F") 和 (21, 2100, "M")，聚簇索引和非聚簇索引的索引树的示意图如下：
+
+<img width="1324" alt="image-20200831151218376" src="https://user-images.githubusercontent.com/1639828/125096313-9a056e80-e107-11eb-87ee-215020403f2b.png">
+
+如果查询语句是 select * from T where id = 5，即主键查询方式，则只需要搜索聚簇索引这棵 B+ 树。如果语句是 select * from T where k = 500，即非聚簇索引查询方式，则需要先搜索非聚簇索引树，得到 id 的值为 5 ，再到聚簇索引树中搜索一次。这个过程称为回表。也就是说，基于非聚簇索引的查询需要多扫描一棵索引树。因此，我们在应用中应该尽量使用主键查询。
+
+### 覆盖索引
+
+上一节讲到，当使用非聚簇索引查询数据时，由于查询结果需要的数据只在主键索引上有，所以不得不回表。那么有没有可能避免回表呢？如果查询语句是 select id from T where k = 500，这时候只需要查询 id 的值，而这个 id 的值已经在非聚簇索引树上了，因此可以直接提供查询结果，不需要回表。也就是说，在这个查询里面，非聚簇索引已经覆盖了我们的查询需求，称为覆盖索引。下面通过一个例子再来说明下覆盖索引。通过 emp_no 来查询职员的性别信息，sql 语句如下：
+
+```sql
+select emp_no, gender from employees where emp_no >= 401060 and emp_no <= 501060;
+```
+
+当只在 emp_no 字段上建立索引时，查询结果如下：
+
+<img width="279" alt="image-20200831163818217" src="https://user-images.githubusercontent.com/1639828/125096402-b1445c00-e107-11eb-8d7e-eddc73a5c47b.png">
+
+耗时如下：
+
+<img width="867" alt="image-20200901153411818" src="https://user-images.githubusercontent.com/1639828/125096468-c15c3b80-e107-11eb-8c64-5f5d29c35a56.png">
+
+为了确认是否使用了覆盖索引，可以使用 explain 命令。
+
+```sql
+explain select emp_no, gender from employees where emp_no >= 401060 and emp_no <= 501060;
+```
+
+执行的结果如下：
+
+<img width="1015" alt="image-20200831164228126" src="https://user-images.githubusercontent.com/1639828/125096569-dafd8300-e107-11eb-9b90-aa37258f5ad2.png">
+
+可以看到 Extra 列的值为 Using where，这说明没有使用覆盖索引。
+
+当在 emp_no 和 gender 字段上建立联合索引时，查询结果如下：
+
+<img width="279" alt="image-20200831163818217" src="https://user-images.githubusercontent.com/1639828/125096693-f8cae800-e107-11eb-83b5-dd2d82d2abda.png">
+
+耗时如下:
+
+<img width="867" alt="image-20200901153634164" src="https://user-images.githubusercontent.com/1639828/125096794-0d0ee500-e108-11eb-87c3-8882d4866c4a.png">
+
+当再次执行 explain 命令时，结果如下：
+
+<img width="1262" alt="image-20200831165422898" src="https://user-images.githubusercontent.com/1639828/125096870-2021b500-e108-11eb-9d0a-2970601f6a4c.png">
+
+可以看到 Extra 列的值含有 Using index，这说明已经使用了覆盖索引。使用覆盖索引的查询效率要高于没有使用覆盖索引的查询效率。在考虑建立冗余索引来支持覆盖索引时需要权衡考虑，因为索引字段的维护总是有代价的。
+
+### 最左前缀原则
+
+从前面的例子中，可以看出索引的存在确实大大提高了查询效率，那是不是需要为每个查询都设计一个索引，答案是大可不必。因为B+ 树这种索引结构，符合最左前缀原则，可以利用索引的最左前缀来定位记录。
+
+现在通过 (first_name, last_name) 这个联合索引来更直观的说明下这个概念。
+
+1. 查询 first_name 为 Moon，last_name 为 Demke 的职员信息，sql 如下：
+
+```sql
+select * from employees where first_name = 'Moon' and last_name = 'Demke';
+```
+
+查询耗时如下：
+
+<img width="812" alt="image-20200831175600850" src="https://user-images.githubusercontent.com/1639828/125096992-3e87b080-e108-11eb-98bd-8c9645ecb655.png">
+
+```sql
+explain select * from employees where first_name = 'Moon' and last_name = 'Demke';
+```
+
+执行上面的 explain 命令，结果如下：
+
+<img width="1180" alt="image-20200831175850279" src="https://user-images.githubusercontent.com/1639828/125097093-56f7cb00-e108-11eb-9ea3-781051ee715a.png">
+
+这说明查询使用了索引。
+
+2. 查询 first_name 为 Moon 的职员信息，sql 如下：
+
+```sql
+select * from employees where first_name = 'Moon';
+```
+
+查询耗时如下：
+
+<img width="620" alt="image-20200831180129137" src="https://user-images.githubusercontent.com/1639828/125097164-6a0a9b00-e108-11eb-80d4-11f7cb9977c6.png">
+
+```sql
+explain select * from employees where first_name = 'Moon';
+```
+
+执行上面的 explain 命令，结果如下：
+
+<img width="1127" alt="image-20200831180251979" src="https://user-images.githubusercontent.com/1639828/125097276-8c041d80-e108-11eb-9a55-2c14cad66c42.png">
+
+这说明同样使用了索引。
+
+3. 查询 last_name 为 Demke 的职员信息，sql 如下：
+
+```sql
+select * from employees where last_name = 'Demke';
+```
+
+查询耗时如下：
+
+<img width="626" alt="image-20200831180508235" src="https://user-images.githubusercontent.com/1639828/125097357-a0481a80-e108-11eb-9558-071d3dadc1be.png">
+
+```sql
+explain select * from employees where last_name = 'Demke';
+```
+
+执行上面的 explain 命令，结果如下：
+
+<img width="1020" alt="image-20200831180639608" src="https://user-images.githubusercontent.com/1639828/125097443-b6ee7180-e108-11eb-97ff-726174b499a1.png">
+
+结果表明没有使用索引。
+
+目前建立的索引为 (first_name, last_name)，从上面的查询可以看出，当同时使用 first_name、last_name 查询以及单独使用 first_name 查询时，都可以使用上索引，当单独使用 last_name 查询时，没有使用上索引，这便是索引的最左前缀原则。因为最左前缀原则，当已经有了 (a, b) 这个联合索引后，一般就不需要单独在 a 上建立索引了。因此，安排联合索引的第一原则是，如果通过调整顺序，可以少维护一个索引，那么这个顺序往往就是需要优先考虑采用的。
+
+4. 最左前缀原则不仅适用于联合索引的最左 N 个字段，也可以是字符串索引的最左 M 个字符。例如，分别查询 first_name 以 Moo 开头和以 oon 结尾的职员的信息。查询以 Moo 开头的 sql 如下：
+
+```sql
+select * from employees where first_name like 'Moo%';
+```
+
+查询耗时如下：
+
+<img width="644" alt="image-20200901112825948" src="https://user-images.githubusercontent.com/1639828/125097539-d1284f80-e108-11eb-9844-3578a4da57af.png">
+
+```sql
+explain select * from employees where first_name like 'Moo%';
+```
+
+执行上面的 explain 命令，结果如下：
+
+<img width="1257" alt="image-20200901113004300" src="https://user-images.githubusercontent.com/1639828/125097625-e604e300-e108-11eb-9537-41bc5970a1b4.png">
+
+结果表明查询使用上了索引。查询以 oon 结尾的 sql 如下：
+
+```sql
+select * from employees where first_name like '%oon';
+```
+
+查询耗时如下：
+
+<img width="645" alt="image-20200901113352506" src="https://user-images.githubusercontent.com/1639828/125097691-f87f1c80-e108-11eb-8e55-ad013c051c38.png">
+
+```sql
+explain select * from employees where first_name like '%oon';
+```
+
+执行上面的 explain 命令，结果如下：
+
+<img width="1014" alt="image-20200901113520312" src="https://user-images.githubusercontent.com/1639828/125097795-0fbe0a00-e109-11eb-99a3-60f76900dba9.png">
+
+结果表明查询没有使用上索引。
+
+### 索引创建规范
+
+1. 业务上具有唯一特性的字段，即使是多个字段的组合，也必须建成唯一索引。
+2. 频繁作为 where 查询条件的字段需要创建索引，尤其在数据表比较大的情况下。
+3. 为需要经常 group by 和 order by 的列创建索引。
+4. update、delete 的 where 条件列，一般也需要创建索引。
+5. distinct 字段需要创建索引。
+6. 超过三个表禁止 join，需要 join 的字段，数据类型必须一致；多表关联查询时，保证被关联的字段需要有索引。
+7. 在 varchar 字段上建立索引时，必须指定索引长度，没必要对全字段建立索引，根据实际文本区分度决定索引长度即可。索引的长度和区分度是一对矛盾体。一般对字符串类型数据，长度为 20 的索引，区分度会高达 90 %以上，可以使用 count(distinct left (列名，索引长度)) / count(*) 的区分度来确定。
+8. 查询时严禁左模糊或者全模糊。如果需要请走搜索引擎来解决。索引文件具有最左前缀匹配特性，如果左边的值未确定，那么无法使用此索引。
+9. 利用覆盖索引来进行查询操作，避免回表。覆盖索引并不是索引的一种，而只是一种查询的效果。
+10. 建组合索引的时候，区分度最高的在最左边。
+11. 防止因字段类型不同造成的隐式转换，导致索引失效。
+12. 创建索引时避免有以下极端误解：
+
++ 宁滥勿缺，认为一个查询就需要建一个索引。
++ 宁缺勿滥，认为索引会消耗空间，严重拖慢记录的更新以及行的新增速度。
++ 抵制唯一索引，认为业务的唯一性一律需要在应用层通过”先查后插“方式解决。
+
+### 索引失效
+
+1. 如果对索引列进行了表达式计算，则会失效。还是以 employees 表为例，sql 如下：
+
+```sql
+select * from employees where id = 201085;
+```
+
+查询耗时如下：
+
+<img width="557" alt="image-20200901140328815" src="https://user-images.githubusercontent.com/1639828/125097912-2a907e80-e109-11eb-96b5-2752157a7cc3.png">
+
+通过 explain 来查看这条 sql 时，结果如下：
+
+<img width="992" alt="image-20200901135806294" src="https://user-images.githubusercontent.com/1639828/125097979-3c722180-e109-11eb-9dff-b87f8a9b44f1.png">
+
+从结果可以看出，索引是起作用的。当 sql 改成如下形式时：
+
+```sql
+select * from employees where id + 1 = 201085;
+```
+
+查询耗时如下：
+
+<img width="595" alt="image-20200901140449110" src="https://user-images.githubusercontent.com/1639828/125098109-54e23c00-e109-11eb-9622-0b276cc0ddad.png">
+
+通过 explain 来查看这条 sql 时，结果如下：
+
+<img width="1014" alt="image-20200901140010461" src="https://user-images.githubusercontent.com/1639828/125098191-662b4880-e109-11eb-9c13-b2808499d584.png">
+
+从结果中看出，索引失效了，这是因为我们需要把索引字段的值都取出来，然后依次进行表达式的计算来进行条件判断，因此采用的就是全表扫描的方式，运行时间也会慢好多。
+
+2. 如果对索引列使用函数也会造成失效，以 employees 表为例，在 first_name 上创建索引，sql 如下：
+
+```sql
+select * from employees where first_name like 'Moo%';
+```
+
+查询耗时如下：
+
+<img width="642" alt="image-20200901141616680" src="https://user-images.githubusercontent.com/1639828/125098324-7e02cc80-e109-11eb-9e9a-db68808f136f.png">
+
+通过 explain 来查看这条 sql 时，结果如下：
+
+<img width="1176" alt="image-20200901141732026" src="https://user-images.githubusercontent.com/1639828/125098434-94108d00-e109-11eb-913b-3889f08d675b.png">
+
+从结果可以看出，索引是起作用的。当 sql 改成如下形式时：
+
+```sql
+select * from employees where substring(first_name, 1, 3) = 'Moo';
+```
+
+查询耗时如下：
+
+<img width="746" alt="image-20200901143208364" src="https://user-images.githubusercontent.com/1639828/125098517-a8ed2080-e109-11eb-95a5-88be8cf37264.png">
+
+通过 explain 来查看这条 sql 时，结果如下：
+
+<img width="1010" alt="image-20200901143303525" src="https://user-images.githubusercontent.com/1639828/125098582-bacec380-e109-11eb-98ae-8d13a2ca357d.png">
+
+从结果中可以看出，索引失效了，采用了全表扫描的方式，运行时间也慢了好多。
+
+3. 在 where 子句中，如果在 or 前的条件列进行了索引，而在 or 后的条件列没有进行索引，那么索引会失效。以 employees 表为例，
+
+在 first_name 上创建了索引，在 last_name 上没有创建索引，sql 如下：
+
+```sql
+select * from employees where first_name = 'Moon' or last_name = 'Demke';
+```
+
+查询耗时如下：
+
+<img width="802" alt="image-20200901144150608" src="https://user-images.githubusercontent.com/1639828/125098670-ce7a2a00-e109-11eb-8dd5-c0ba2b1a2db2.png">
+
+通过 explain 来查看这条 sql 时，结果如下：
+
+<img width="1018" alt="image-20200901144226889" src="https://user-images.githubusercontent.com/1639828/125098742-e18cfa00-e109-11eb-8b20-bbbba4648659.png">
+
+从结果中可以看出，first_name 索引并没有起作用。
+
+4. 当我们使用 like 进行模糊查询的时候，后面不能是 %。以 employees 表为例，在 first_name 上创建了索引，sql 如下：
+
+```sql
+select * from employees where first_name like '%oon';
+```
+
+查询耗时如下：
+
+<img width="643" alt="image-20200901144907632" src="https://user-images.githubusercontent.com/1639828/125098828-f79aba80-e109-11eb-878a-cd21267b6e5d.png">
+
+通过 explain 来查看这条 sql 时，结果如下：
+
+<img width="1012" alt="image-20200901152040550" src="https://user-images.githubusercontent.com/1639828/125098917-113c0200-e10a-11eb-9c54-c587cfeefe63.png">
+
+从结果中可以看出，first_name 索引并没有起作用。
+
+### 最后
+
+索引对于良好的性能非常关键。尤其是当表中的数据量越来越大时，索引对性能的影响愈发重要。当数据量较小且负载较低时，不恰当的索引对性能的影响可能还不明显，但是当数据量逐渐增大是，性能则会急剧下降。索引优化应该是对查询性能优化最有效的手段了。索引能够轻易将查询性能提高几个数量级，”最优“的索引有时比一个”好的“索引性能要好两个数量级。对于索引底层的了解有助于我们优化创建的索引。
+
+### 附录
+
+employees 的建表语句：
+
+```sql
+CREATE TABLE `employees` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `emp_no` int NOT NULL,
+  `birth_date` date NOT NULL,
+  `first_name` varchar(14) NOT NULL,
+  `last_name` varchar(16) NOT NULL,
+  `gender` enum('M','F') NOT NULL,
+  `hire_date` date NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=300025 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
