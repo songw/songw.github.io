@@ -1,0 +1,5 @@
+$k$-NN ($k$-nearest neighbor) 由 **Cover** 和 **Hart** 于 1968 年提出，属于机器学习算法中的监督学习算法，可以用来解决分类和回归问题。
+## $k$-NN 的工作原理
+为了对 $k$-NN 算法有个直观的认识，我们看个例子：
+
+![knn](https://user-images.githubusercontent.com/1639828/126052421-e16fd4d9-910d-41f4-9667-e1b1e74c70d4.jpeg)
