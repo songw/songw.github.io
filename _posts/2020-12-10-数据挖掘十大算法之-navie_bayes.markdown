@@ -11,7 +11,7 @@ categories: jekyll update
             tex2jax: {
             skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
             inlineMath: [['$','$']]
-            }:
+            }
         });
     </script>
 </head>
