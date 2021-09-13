@@ -137,8 +137,10 @@ print("KNN准确率: %.4lf" % accuracy_score(test_y, predict_y))
 ```python
 KNN准确率: 0.8052
 ```
+
 ## 总结
 本文介绍了 $k$ -NN 的工作原理以及在实际问题中的应用。
+
 #### 数据下载
 鸢尾花：https://www.kaggle.com/uciml/iris
 
