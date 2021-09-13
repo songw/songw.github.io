@@ -10,9 +10,10 @@ categories: jekyll update
         MathJax.Hub.Config({
             tex2jax: {
             skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
-            inlineMath: [['$','$'], ["\\(","\\)"]],
-            displayMath: [['$$','$$'], ["\\[","\\]"]],
+            inlineMath: [ ['$','$'], ["\\(","\\)"] ], 
+            displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
             processEscapes: true
+            }
         });
     </script>
 </head>
