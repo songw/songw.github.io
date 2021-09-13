@@ -5,13 +5,13 @@ date:   2020-12-10 10:02:00 +0800
 categories: jekyll update
 ---
 <head>
-    <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="textavascript"></script>
+    <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
     <script type="text/x-mathjax-config">
         MathJax.Hub.Config({
             tex2jax: {
             skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
             inlineMath: [['$','$']]
-            }
+            }:
         });
     </script>
 </head>
@@ -22,7 +22,7 @@ categories: jekyll update
 
 #### 条件概率
 
-所谓条件概率，就是在事件B发生的条件下，事件A发生的概率，用P(A|B)来表示。在下面的文氏图中，定义了事件 $A$ 和 $B$，以及他们的交集 $A\cap B$，$\overline A$ 为 $A$ 的补集。则在事件 $B$ 发生的条件下，事件 $A$ 发生的概率为 $P(A|B)$ = $\displaystyle{P (A \cap B)} \over \displaystyle{P(B)}$ => $P(A \cap B)=P(A|B)P(B)$；同理可得，$P(B|A)$ = $\displaystyle{P (A \cap B)} \over \displaystyle{P(A)} $ => $P(A \cap B)=P(B|A)P(A)$，于是 $P(A|B)P(B) = P(B|A)P(A)$。
+所谓条件概率，就是在事件 $B$ 发生的条件下，事件 $A$ 发生的概率，用 $P(A|B)$ 来表示。在下面的文氏图中，定义了事件 $A$ 和 $B$，以及他们的交集 $A\cap B$，$\overline A$ 为 $A$ 的补集。则在事件 $B$ 发生的条件下，事件 $A$ 发生的概率为 $P(A|B)$ = $\displaystyle{P (A \cap B)} \over \displaystyle{P(B)}$ => $P(A \cap B)=P(A|B)P(B)$；同理可得，$P(B|A)$ = $\displaystyle{P (A \cap B)} \over \displaystyle{P(A)} $ => $P(A \cap B)=P(B|A)P(A)$，于是 $P(A|B)P(B) = P(B|A)P(A)$。
 
 #### 全概率
 
