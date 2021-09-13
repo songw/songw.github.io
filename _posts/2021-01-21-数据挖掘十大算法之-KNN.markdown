@@ -1,3 +1,9 @@
+---
+layout: post
+title:  "数据挖掘十大算法之-KNN"
+date:   2021-01-31 10:44:00 +0800
+categories: jekyll update
+---
 <head>
     <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
     <script type="text/x-mathjax-config">
@@ -9,12 +15,6 @@
         });
     </script>
 </head>
----
-layout: post
-title:  "数据挖掘十大算法之-KNN"
-date:   2021-01-31 10:44:00 +0800
-categories: jekyll update
----
 $k$-NN ($k$-nearest neighbor) 由 **Cover** 和 **Hart** 于 1968 年提出，属于机器学习算法中的监督学习算法，可以用来解决分类和回归问题。
 ## $k$-NN 的工作原理
 为了对 $k$-NN 算法有个直观的认识，我们看个例子：
