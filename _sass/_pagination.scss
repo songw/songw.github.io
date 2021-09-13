@@ -1,52 +1,53 @@
-// Pagination
-//
-// Super lightweight (HTML-wise) blog pagination. `span`s are provide for when
-// there are no more previous or next posts to show.
-
 .pagination {
-  margin: 0 -1.5rem;
-  color: var(--gray-500);
+  font-size: $h5;
+  font-family: $heading-font-family;
+  font-weight: 300;
   text-align: center;
 }
 
-// Pagination items can be `span`s or `a`s
-.pagination-item {
-  display: block;
-  padding: var(--spacer);
-  text-decoration: none;
-  border: solid var(--border-color);
-  border-width: 1px 0;
-
-  &:first-child {
-    margin-bottom: -1px;
-  }
+.pagination a, .pagination .disabled {
+  -webkit-transition: all 0.2s ease-in-out;
+  -moz-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+  background: #fafafa;
+  border-radius: 0.1875em;
+  border: 1px solid #f3f3f3;
+  color: #333333;
+  padding: .75em 1.5em;
+  font-size: $h5;
 }
 
-// Only provide a hover state for linked pagination items
-a.pagination-item:hover {
-  background-color: var(--border-color);
+.pagination .disabled, .pagination .pagination-meta {
+  opacity: 0.5;
 }
 
-@media (min-width: $sm-width) {
-  .pagination {
-    margin: var(--spacer-3) 0;
-    height: calc(var(--body-font-size) * var(--body-line-height) + var(--spacer) * 2);
-  }
+.pagination .pagination-meta {
+  overflow: hidden;
+}
 
-  .pagination-item {
-    float: left;
-    width: 50%;
-    border-width: 1px;
+.pagination a:hover, .pagination a:focus {
+  background: white;
+  color: #477dca;
+}
 
-    &:first-child {
-      margin-bottom: 0;
-      border-top-left-radius: var(--border-radius);
-      border-bottom-left-radius: var(--border-radius);
-    }
-    &:last-child {
-      margin-left: -1px;
-      border-top-right-radius: var(--border-radius);
-      border-bottom-right-radius: var(--border-radius);
-    }
-  }
+.pagination a:active {
+  background: #f7f7f7;
+}
+
+.pagination .button {
+  font-size: 1rem;
+  font-weight: 300;
+  letter-spacing: 1px;
+}
+
+.button-disabled {
+  opacity: 0.55;
+  background-color: #999;
+}
+
+.button-disabled:hover,
+.button-disabled:active,
+.button-disabled:focus {
+  cursor: not-allowed;
+  background-color: #999;
 }

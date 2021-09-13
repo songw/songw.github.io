@@ -1,8 +1,20 @@
 ---
 layout: page
-title: About
+title: About Mixyll
+permalink: /about/
+tags: about
 ---
 
-**Not Pure Poole** is a simple, beautiful, and powerful Jekyll theme for blogs. It is built on [Poole](https://github.com/poole/poole) and [Pure](https://purecss.io/).
+This Jekyll theme was originally crafted by [John Otander](http://johnotander.com) as [Pixyll](https://github.com/johno/pixyll) and modified by [Sai Kiran Sripada](https://www.saikiransripada.com/).
 
-For more information about Not Pure Poole, please browse the [README](https://github.com/vszhub/not-pure-poole) file.
+Checkout the [Github repository](https://github.com/saikiransripada/mixyll) to download it,
+request a feature, report a bug, or contribute. It's free, and open source
+([MIT](http://opensource.org/licenses/MIT)).
+
+Thanks to the following:
+
+* [Pixyll](https://github.com/johno/pixyll)
+* [BASSCSS](http://basscss.com)
+* [Jekyll](http://jekyllrb.com)
+* [Refills](http://refills.bourbon.io/)
+* [Type Scale](http://type-scale.com/)

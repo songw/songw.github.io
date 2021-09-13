@@ -1,58 +1,82 @@
-// Code
-//
-// Inline and block-level code snippets. Includes tweaks to syntax highlighted
-// snippets from Pygments/Rouge and Gist embeds.
+pre,
+pre code {
+  background-color: transparent;
+  border-radius: $pre-border-radius;
+}
 
-code,
-pre {
-  font-family: var(--code-font);
+pre,
+code {
+  font-family: $monospace-font-family;
 }
 
 code {
-  font-size: 85%;
+  color: #bf616a;
+}
+
+p {
+  code {
+    background-color: #f9f9f9;
+    border-radius: 3px;
+    padding: .25em .5em;
+  }
 }
 
 pre {
-  display: block;
-  margin-top: 0;
-  margin-bottom: var(--spacer-3);
-  overflow: auto;
+  padding: 1.125em;
+  line-height: 1.11;
+  overflow-x: scroll;
+  margin-bottom: 0.88em;
+  background-color: $pre-background-color;
 }
 
 .highlight {
-  padding: var(--spacer);
-  margin-bottom: var(--spacer);
-  background-color: var(--code-bg);
-  border-radius: var(--border-radius);
-
-  pre {
-    margin-bottom: 0;
-  }
-
-  // Triple backticks (code fencing) doubles the .highlight elements
-  .highlight {
-    padding: 0;
-  }
+  margin: 1rem 0;
 }
 
-.rouge-table {
-  margin-bottom: 0;
-  font-size: 100%;
-
-  &,
-  td,
-  th {
-    border: 0;
-  }
-
-  .gutter {
-    vertical-align: top;
-    user-select: none;
-    opacity: .25;
-  }
+.highlight .p {
+  font-size: 1.125rem;
+  line-height: 1;
 }
 
-// Gist via GitHub Pages
-.gist .markdown-body {
-  padding: 15px !important;
+pre {
+    counter-reset: line-numbering;
+    white-space: pre;
+    overflow-x: auto;
+    word-break: inherit;
+    word-wrap: inherit;
+}
+
+pre a {
+    background-image: none;
+}
+
+pre a::before {
+  content: counter(line-numbering);
+  counter-increment: line-numbering;
+  padding-right: 1em; /* space after numbers */
+  width: 25px;
+  text-align: right;
+  opacity: 0.7;
+  display: inline-block;
+  color: $light-gray;
+  margin-right: 16px;
+  font-size: 13px;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+pre a:first-of-type::before {
+  padding-top: 10px;
+}
+
+pre a:last-of-type::before {
+  padding-bottom: 10px;
+}
+
+pre a:only-of-type::before {
+  padding: 10px;
 }
