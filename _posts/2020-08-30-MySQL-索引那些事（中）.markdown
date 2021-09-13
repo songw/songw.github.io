@@ -1,0 +1,190 @@
+---
+layout: post
+title:  "MySQL 索引那些事"
+date:   2021-07-09 18:09:28 +0800
+categories: jekyll update
+---
+### 聚簇索引和非聚簇索引
+
+聚簇索引是按照每张表的主键构造的一棵 B+ 树，叶子节点中存放的即为整张表的行记录数据，聚簇索引的叶子节点也称为数据页。非聚簇索引叶子节点并不包含行记录的全部数据。叶子节点除了包含键值以外，每个叶子节点中的索引行中还包含一个书签。该书签用来告诉 InnoDB 存储引擎哪里可以找到与索引相对应的行数据。由于 InnoDB 存储引擎表是索引组织表，因此 InnoDB 存储引擎的非聚簇索引的书签就是相应的行数据的聚簇索引键。那么基于聚簇索引和非聚簇索引的查询的区别在哪里呢？先通过一个例子来直观感受下：查询 emp_no 为 401060 的记录，通过字段 emp_no 来查询，sql 如下。
+
+```sql
+select * from employees where emp_no = 401060;
+```
+
+查询结果如下：
+
+<img width="640" alt="image-20200830232207672" src="https://user-images.githubusercontent.com/1639828/125096095-632f5880-e107-11eb-99ba-b67f4780cb19.png">
+
+通过字段 id 来查询，sql 如下：
+
+```sql
+select * from employees where id = 201085;
+```
+
+查询结果如下：
+
+<img width="638" alt="image-20200830232223312" src="https://user-images.githubusercontent.com/1639828/125096173-76422880-e107-11eb-8156-406be46f77ba.png">
+
+两种查询方式的耗时如下：
+
+<img width="592" alt="image-20200830232253255" src="https://user-images.githubusercontent.com/1639828/125096233-865a0800-e107-11eb-990d-2df84b210e2f.png">
+
+从上面的结果，可以看出，两种查询方式的结果是相同的，但是基于聚簇索引的查询要快于基于非聚簇索引的查询。同样是基于索引的查询，查询结果也是相同的，那为什么查询效率不一样呢？举个例子来说明下，假设有数据表 T，表中包含三个字段 id、emp_no 和 gender，id 为主键，并且在 k 上有索引。表中 R1~R5 的值分别为(3, 300, "M")、(5, 500, "M")、(8, 800, "F")、(13, 1300, "F") 和 (21, 2100, "M")，聚簇索引和非聚簇索引的索引树的示意图如下：
+
+<img width="1324" alt="image-20200831151218376" src="https://user-images.githubusercontent.com/1639828/125096313-9a056e80-e107-11eb-87ee-215020403f2b.png">
+
+如果查询语句是 select * from T where id = 5，即主键查询方式，则只需要搜索聚簇索引这棵 B+ 树。如果语句是 select * from T where k = 500，即非聚簇索引查询方式，则需要先搜索非聚簇索引树，得到 id 的值为 5 ，再到聚簇索引树中搜索一次。这个过程称为回表。也就是说，基于非聚簇索引的查询需要多扫描一棵索引树。因此，我们在应用中应该尽量使用主键查询。
+
+### 覆盖索引
+
+上一节讲到，当使用非聚簇索引查询数据时，由于查询结果需要的数据只在主键索引上有，所以不得不回表。那么有没有可能避免回表呢？如果查询语句是 select id from T where k = 500，这时候只需要查询 id 的值，而这个 id 的值已经在非聚簇索引树上了，因此可以直接提供查询结果，不需要回表。也就是说，在这个查询里面，非聚簇索引已经覆盖了我们的查询需求，称为覆盖索引。下面通过一个例子再来说明下覆盖索引。通过 emp_no 来查询职员的性别信息，sql 语句如下：
+
+```sql
+select emp_no, gender from employees where emp_no >= 401060 and emp_no <= 501060;
+```
+
+当只在 emp_no 字段上建立索引时，查询结果如下：
+
+<img width="279" alt="image-20200831163818217" src="https://user-images.githubusercontent.com/1639828/125096402-b1445c00-e107-11eb-8d7e-eddc73a5c47b.png">
+
+耗时如下：
+
+<img width="867" alt="image-20200901153411818" src="https://user-images.githubusercontent.com/1639828/125096468-c15c3b80-e107-11eb-8c64-5f5d29c35a56.png">
+
+为了确认是否使用了覆盖索引，可以使用 explain 命令。
+
+```sql
+explain select emp_no, gender from employees where emp_no >= 401060 and emp_no <= 501060;
+```
+
+执行的结果如下：
+
+<img width="1015" alt="image-20200831164228126" src="https://user-images.githubusercontent.com/1639828/125096569-dafd8300-e107-11eb-9b90-aa37258f5ad2.png">
+
+可以看到 Extra 列的值为 Using where，这说明没有使用覆盖索引。
+
+当在 emp_no 和 gender 字段上建立联合索引时，查询结果如下：
+
+<img width="279" alt="image-20200831163818217" src="https://user-images.githubusercontent.com/1639828/125096693-f8cae800-e107-11eb-83b5-dd2d82d2abda.png">
+
+耗时如下:
+
+<img width="867" alt="image-20200901153634164" src="https://user-images.githubusercontent.com/1639828/125096794-0d0ee500-e108-11eb-87c3-8882d4866c4a.png">
+
+当再次执行 explain 命令时，结果如下：
+
+<img width="1262" alt="image-20200831165422898" src="https://user-images.githubusercontent.com/1639828/125096870-2021b500-e108-11eb-9d0a-2970601f6a4c.png">
+
+可以看到 Extra 列的值含有 Using index，这说明已经使用了覆盖索引。使用覆盖索引的查询效率要高于没有使用覆盖索引的查询效率。在考虑建立冗余索引来支持覆盖索引时需要权衡考虑，因为索引字段的维护总是有代价的。
+
+### 最左前缀原则
+
+从前面的例子中，可以看出索引的存在确实大大提高了查询效率，那是不是需要为每个查询都设计一个索引，答案是大可不必。因为B+ 树这种索引结构，符合最左前缀原则，可以利用索引的最左前缀来定位记录。
+
+现在通过 (first_name, last_name) 这个联合索引来更直观的说明下这个概念。
+
+1. 查询 first_name 为 Moon，last_name 为 Demke 的职员信息，sql 如下：
+
+```sql
+select * from employees where first_name = 'Moon' and last_name = 'Demke';
+```
+
+查询耗时如下：
+
+<img width="812" alt="image-20200831175600850" src="https://user-images.githubusercontent.com/1639828/125096992-3e87b080-e108-11eb-98bd-8c9645ecb655.png">
+
+```sql
+explain select * from employees where first_name = 'Moon' and last_name = 'Demke';
+```
+
+执行上面的 explain 命令，结果如下：
+
+<img width="1180" alt="image-20200831175850279" src="https://user-images.githubusercontent.com/1639828/125097093-56f7cb00-e108-11eb-9ea3-781051ee715a.png">
+
+这说明查询使用了索引。
+
+2. 查询 first_name 为 Moon 的职员信息，sql 如下：
+
+```sql
+select * from employees where first_name = 'Moon';
+```
+
+查询耗时如下：
+
+<img width="620" alt="image-20200831180129137" src="https://user-images.githubusercontent.com/1639828/125097164-6a0a9b00-e108-11eb-80d4-11f7cb9977c6.png">
+
+```sql
+explain select * from employees where first_name = 'Moon';
+```
+
+执行上面的 explain 命令，结果如下：
+
+<img width="1127" alt="image-20200831180251979" src="https://user-images.githubusercontent.com/1639828/125097276-8c041d80-e108-11eb-9a55-2c14cad66c42.png">
+
+这说明同样使用了索引。
+
+3. 查询 last_name 为 Demke 的职员信息，sql 如下：
+
+```sql
+select * from employees where last_name = 'Demke';
+```
+
+查询耗时如下：
+
+<img width="626" alt="image-20200831180508235" src="https://user-images.githubusercontent.com/1639828/125097357-a0481a80-e108-11eb-9558-071d3dadc1be.png">
+
+```sql
+explain select * from employees where last_name = 'Demke';
+```
+
+执行上面的 explain 命令，结果如下：
+
+<img width="1020" alt="image-20200831180639608" src="https://user-images.githubusercontent.com/1639828/125097443-b6ee7180-e108-11eb-97ff-726174b499a1.png">
+
+结果表明没有使用索引。
+
+目前建立的索引为 (first_name, last_name)，从上面的查询可以看出，当同时使用 first_name、last_name 查询以及单独使用 first_name 查询时，都可以使用上索引，当单独使用 last_name 查询时，没有使用上索引，这便是索引的最左前缀原则。因为最左前缀原则，当已经有了 (a, b) 这个联合索引后，一般就不需要单独在 a 上建立索引了。因此，安排联合索引的第一原则是，如果通过调整顺序，可以少维护一个索引，那么这个顺序往往就是需要优先考虑采用的。
+
+4. 最左前缀原则不仅适用于联合索引的最左 N 个字段，也可以是字符串索引的最左 M 个字符。例如，分别查询 first_name 以 Moo 开头和以 oon 结尾的职员的信息。查询以 Moo 开头的 sql 如下：
+
+```sql
+select * from employees where first_name like 'Moo%';
+```
+
+查询耗时如下：
+
+<img width="644" alt="image-20200901112825948" src="https://user-images.githubusercontent.com/1639828/125097539-d1284f80-e108-11eb-9844-3578a4da57af.png">
+
+```sql
+explain select * from employees where first_name like 'Moo%';
+```
+
+执行上面的 explain 命令，结果如下：
+
+<img width="1257" alt="image-20200901113004300" src="https://user-images.githubusercontent.com/1639828/125097625-e604e300-e108-11eb-9537-41bc5970a1b4.png">
+
+结果表明查询使用上了索引。查询以 oon 结尾的 sql 如下：
+
+```sql
+select * from employees where first_name like '%oon';
+```
+
+查询耗时如下：
+
+<img width="645" alt="image-20200901113352506" src="https://user-images.githubusercontent.com/1639828/125097691-f87f1c80-e108-11eb-8e55-ad013c051c38.png">
+
+```sql
+explain select * from employees where first_name like '%oon';
+```
+
+执行上面的 explain 命令，结果如下：
+
+<img width="1014" alt="image-20200901113520312" src="https://user-images.githubusercontent.com/1639828/125097795-0fbe0a00-e109-11eb-99a3-60f76900dba9.png">
+
+结果表明查询没有使用上索引。
+
+
+### 总结
+
+通过本文我们了解了不同类型的索引以及索引的最左前缀原则。

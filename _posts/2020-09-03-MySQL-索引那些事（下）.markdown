@@ -1,0 +1,160 @@
+---
+layout: post
+title:  "MySQL 索引那些事"
+date:   2021-07-09 18:09:28 +0800
+categories: jekyll update
+---
+### 索引创建规范
+
+1. 业务上具有唯一特性的字段，即使是多个字段的组合，也必须建成唯一索引。
+2. 频繁作为 where 查询条件的字段需要创建索引，尤其在数据表比较大的情况下。
+3. 为需要经常 group by 和 order by 的列创建索引。
+4. update、delete 的 where 条件列，一般也需要创建索引。
+5. distinct 字段需要创建索引。
+6. 超过三个表禁止 join，需要 join 的字段，数据类型必须一致；多表关联查询时，保证被关联的字段需要有索引。
+7. 在 varchar 字段上建立索引时，必须指定索引长度，没必要对全字段建立索引，根据实际文本区分度决定索引长度即可。索引的长度和区分度是一对矛盾体。一般对字符串类型数据，长度为 20 的索引，区分度会高达 90 %以上，可以使用 count(distinct left (列名，索引长度)) / count(*) 的区分度来确定。
+8. 查询时严禁左模糊或者全模糊。如果需要请走搜索引擎来解决。索引文件具有最左前缀匹配特性，如果左边的值未确定，那么无法使用此索引。
+9. 利用覆盖索引来进行查询操作，避免回表。覆盖索引并不是索引的一种，而只是一种查询的效果。
+10. 建组合索引的时候，区分度最高的在最左边。
+11. 防止因字段类型不同造成的隐式转换，导致索引失效。
+12. 创建索引时避免有以下极端误解：
+
++ 宁滥勿缺，认为一个查询就需要建一个索引。
++ 宁缺勿滥，认为索引会消耗空间，严重拖慢记录的更新以及行的新增速度。
++ 抵制唯一索引，认为业务的唯一性一律需要在应用层通过”先查后插“方式解决。
+
+### 索引失效
+
+1. 如果对索引列进行了表达式计算，则会失效。还是以 employees 表为例，sql 如下：
+
+```sql
+select * from employees where id = 201085;
+```
+
+查询耗时如下：
+
+<img width="557" alt="image-20200901140328815" src="https://user-images.githubusercontent.com/1639828/125097912-2a907e80-e109-11eb-96b5-2752157a7cc3.png">
+
+通过 explain 来查看这条 sql 时，结果如下：
+
+<img width="992" alt="image-20200901135806294" src="https://user-images.githubusercontent.com/1639828/125097979-3c722180-e109-11eb-9dff-b87f8a9b44f1.png">
+
+从结果可以看出，索引是起作用的。当 sql 改成如下形式时：
+
+```sql
+select * from employees where id + 1 = 201085;
+```
+
+查询耗时如下：
+
+<img width="595" alt="image-20200901140449110" src="https://user-images.githubusercontent.com/1639828/125098109-54e23c00-e109-11eb-9622-0b276cc0ddad.png">
+
+通过 explain 来查看这条 sql 时，结果如下：
+
+<img width="1014" alt="image-20200901140010461" src="https://user-images.githubusercontent.com/1639828/125098191-662b4880-e109-11eb-9c13-b2808499d584.png">
+
+从结果中看出，索引失效了，这是因为我们需要把索引字段的值都取出来，然后依次进行表达式的计算来进行条件判断，因此采用的就是全表扫描的方式，运行时间也会慢好多。
+
+2. 如果对索引列使用函数也会造成失效，以 employees 表为例，在 first_name 上创建索引，sql 如下：
+
+```sql
+select * from employees where first_name like 'Moo%';
+```
+
+查询耗时如下：
+
+<img width="642" alt="image-20200901141616680" src="https://user-images.githubusercontent.com/1639828/125098324-7e02cc80-e109-11eb-9e9a-db68808f136f.png">
+
+通过 explain 来查看这条 sql 时，结果如下：
+
+<img width="1176" alt="image-20200901141732026" src="https://user-images.githubusercontent.com/1639828/125098434-94108d00-e109-11eb-913b-3889f08d675b.png">
+
+从结果可以看出，索引是起作用的。当 sql 改成如下形式时：
+
+```sql
+select * from employees where substring(first_name, 1, 3) = 'Moo';
+```
+
+查询耗时如下：
+
+<img width="746" alt="image-20200901143208364" src="https://user-images.githubusercontent.com/1639828/125098517-a8ed2080-e109-11eb-95a5-88be8cf37264.png">
+
+通过 explain 来查看这条 sql 时，结果如下：
+
+<img width="1010" alt="image-20200901143303525" src="https://user-images.githubusercontent.com/1639828/125098582-bacec380-e109-11eb-98ae-8d13a2ca357d.png">
+
+从结果中可以看出，索引失效了，采用了全表扫描的方式，运行时间也慢了好多。
+
+3. 在 where 子句中，如果在 or 前的条件列进行了索引，而在 or 后的条件列没有进行索引，那么索引会失效。以 employees 表为例，
+
+在 first_name 上创建了索引，在 last_name 上没有创建索引，sql 如下：
+
+```sql
+select * from employees where first_name = 'Moon' or last_name = 'Demke';
+```
+
+查询耗时如下：
+
+<img width="802" alt="image-20200901144150608" src="https://user-images.githubusercontent.com/1639828/125098670-ce7a2a00-e109-11eb-8dd5-c0ba2b1a2db2.png">
+
+通过 explain 来查看这条 sql 时，结果如下：
+
+<img width="1018" alt="image-20200901144226889" src="https://user-images.githubusercontent.com/1639828/125098742-e18cfa00-e109-11eb-8b20-bbbba4648659.png">
+
+从结果中可以看出，first_name 索引并没有起作用。
+
+4. 当我们使用 like 进行模糊查询的时候，后面不能是 %。以 employees 表为例，在 first_name 上创建了索引，sql 如下：
+
+```sql
+select * from employees where first_name like '%oon';
+```
+
+查询耗时如下：
+
+<img width="643" alt="image-20200901144907632" src="https://user-images.githubusercontent.com/1639828/125098828-f79aba80-e109-11eb-878a-cd21267b6e5d.png">
+
+通过 explain 来查看这条 sql 时，结果如下：
+
+<img width="1012" alt="image-20200901152040550" src="https://user-images.githubusercontent.com/1639828/125098917-113c0200-e10a-11eb-9c54-c587cfeefe63.png">
+
+从结果中可以看出，first_name 索引并没有起作用。
+
+### 最后
+
+索引对于良好的性能非常关键。尤其是当表中的数据量越来越大时，索引对性能的影响愈发重要。当数据量较小且负载较低时，不恰当的索引对性能的影响可能还不明显，但是当数据量逐渐增大是，性能则会急剧下降。索引优化应该是对查询性能优化最有效的手段了。索引能够轻易将查询性能提高几个数量级，”最优“的索引有时比一个”好的“索引性能要好两个数量级。对于索引底层的了解有助于我们优化创建的索引。
+
+### 附录
+
+employees 的建表语句：
+
+```sql
+CREATE TABLE `employees` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `emp_no` int NOT NULL,
+  `birth_date` date NOT NULL,
+  `first_name` varchar(14) NOT NULL,
+  `last_name` varchar(16) NOT NULL,
+  `gender` enum('M','F') NOT NULL,
+  `hire_date` date NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=300025 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
