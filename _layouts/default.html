@@ -1,18 +1,25 @@
-<!DOCTYPE html>
-<html lang="{{ page.lang | default: site.lang | default: 'en' }}">
-{% include head.html %}
-<body class="site{% if site.animated %} animated fade-in-down{% endif %}">
+---
+layout: base
+---
 
-  <div class="site-wrap">
-    {% include header.html %}
+<div class="intro-header"></div>
 
-    <div class="post p2 p-responsive wrap" role="main">
-      <div class="measure">
-        {{ content }}
-      </div>
+<div role="main" class="{% if page.full-width %} container-fluid {% else %} container-md {% endif %}">
+  {% if page.before-content %}
+    <div class="before-content">
+      {% for file in page.before-content %}
+        {% include {{ file }} %}
+      {% endfor %}
     </div>
-  </div>
+  {% endif %}
 
-  {% include footer.html %}
-</body>
-</html>
+  {{ content }}
+
+  {% if page.after-content %}
+    <div class="after-content">
+      {% for file in page.after-content %}
+        {% include {{ file }} %}
+      {% endfor %}
+    </div>
+  {% endif %}
+</div>
