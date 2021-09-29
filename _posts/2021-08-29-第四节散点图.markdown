@@ -32,7 +32,7 @@ plt.show()
 ```
 代码执行后得到的图形如下图所示：
 
-[image:79CBE0BF-58A8-4586-9B9D-F2A8BBC95620-689-000172F6655AF3FB/6AF26989-A9A5-45FD-ABD1-28DAC6C63ABC.png]
+![image](https://user-images.githubusercontent.com/1639828/135200520-33fbe9f8-e613-4080-a20b-2fd29011ab55.png)
 x 轴表示商品的价格，y 轴表示商品的销量，每个点表示一组数据。上面点的样式是默认的，我们可以通过设置参数的方式来改变点的样式，例如大小、颜色、形状等。
 ```python
 import matplotlib.pyplot as plt
@@ -53,7 +53,7 @@ plt.show()
 ```
 上面的代码中，我们通过参数 s 设置了点的大小，c 设置了点的颜色，marker 设置了点的形状。执行完代码生成的图形如下图所示：
 
-[image:D9C30063-FF16-4D90-8493-33A59266D9A2-689-000173B578259EA3/1B4DA9AA-763B-456D-BE44-70096C21BFB6.png]
+![image](https://user-images.githubusercontent.com/1639828/135200550-6d97fd59-2b52-4abb-b926-17b44c0ca7fe.png)
 同样地，我们还可以参数设置点的边缘颜色，点的透明度，例如：
 ```python
 import matplotlib.pyplot as plt
@@ -74,7 +74,7 @@ plt.show()
 ```
 在上面的代码中，设置点的边缘的颜色为黑色，边缘线的粗细为 1，透明度设置成 0.7。执行完代码生成的图形如下图所示：
 
-[image:495A1482-B2A9-4E7E-81B3-9C7E60B44EE5-689-000173FC6D9F64E4/A2CAAD52-25C0-4DC0-931F-008D09994CA2.png]
+![image](https://user-images.githubusercontent.com/1639828/135200598-a8e14e4b-86a7-444d-b173-94cd69621598.png)
 上面的例子中，点的颜色是相同的，有时候我们需要根据另外一组数据来为点设置成不同的颜色，这样通过点的颜色便可以知道数据的大小。例如：
 ```python
 import matplotlib.pyplot as plt
@@ -97,7 +97,7 @@ plt.show()
 ```
 在上面的代码中，我们添加了一组代表利润率的数据 `profit_margin`，在绘制图形时，将参数 c 设置成 `profit_margin`，这样每个点都有一个自己的颜色值。代码执行后得到的图形如下图所示：
 
-[image:93DD4C69-0F93-438C-9AAD-0F08E9A030DF-689-000174B332A1F109/7EF61DB7-B741-4997-B7E3-1B79B507E004.png]
+![image](https://user-images.githubusercontent.com/1639828/135200652-e98b088f-0c23-404e-93e6-56486d8fed27.png)
 上图中，颜色越深代表值越大，虽然从数据我们可以知道颜色越深代表值越大，但是为了让图形传达的信息更加精确，需要明确标识颜色和值的对应关系。例如：
 ```python
 import matplotlib.pyplot as plt
@@ -123,7 +123,7 @@ plt.tight_layout()
 plt.show()
 ```
 上面的代码中，通过 colorbar() 函数设置了色卡。代码执行后得到的图形如下图所示：
-[image:39BFF848-C8CF-4EDD-B2AC-C5398C345247-689-0001751E61AFE4B6/06F635F9-92C3-4B3E-B913-DA291AC64B91.png]
+![image](https://user-images.githubusercontent.com/1639828/135200711-a4533f97-b39f-490e-8897-de858ae9e209.png)
 上面是通过颜色的深浅来代表值的大小，在用颜色的深浅来代表值的大小的同时，我们还可以根据数据来设置点的大小。例如：
 ```python
 import matplotlib.pyplot as plt
@@ -151,7 +151,7 @@ plt.show()
 ```
 上面的代码中，将点的大小设置成 profit_margin * 10，这样点的大小便和利润率成正比。代码执行后得到的图形如下图所示：
 
-[image:34350C9A-6E15-4E43-B2EC-8696A8115DCE-689-00017561C0B3A8B0/C424F57C-38BB-421A-8159-3D6DCF09F803.png]
+![image](https://user-images.githubusercontent.com/1639828/135200779-69934bd4-1c44-4c9d-a21a-c51c4e60dbd2.png)
 上面的例子中只包含一组数据，在同一个图形中可以包含多组数据的散点图，例如：
 ```python
 import matplotlib.pyplot as plt
@@ -186,7 +186,7 @@ plt.tight_layout()
 plt.show()
 ```
 在上面的代码中，我们又添加了一组数据的点图，代码执行后得到的图形如下图所示：
-[image:48EC22EA-0626-4503-8F6E-5EC3B2E667BA-689-0001760BDC5AEDD4/2AE70A6F-8D62-4549-9FBC-B2AC5EE0612F.png]
+![image](https://user-images.githubusercontent.com/1639828/135200840-ad0035bc-9f14-41f0-bfbf-23b0c06c13d7.png)
 ## 3.应用场景
 ### 3.1 适用场景
 + 适用于分析变量之间是否存在某种关系或相关性。
