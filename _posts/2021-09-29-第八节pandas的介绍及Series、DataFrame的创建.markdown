@@ -299,4 +299,4 @@ print(df)
 在上面的代码中，我们通过元组的列表来创建 DataFrame 对象，在创建 DataFrame 对象时，通过 index 参数来指定行索引，通过 columns 来指定列索引。
 ## 4.总结
 本节课我们介绍了 Pandas 以及它的两个重要数据结构 Series 和 DataFrame，接下来介绍了 Series 对象以及 DataFrame 对象的创建。
-[image:5183C50D-92CC-4111-96C8-2FF1DAE65E9F-3647-000117094D2A2DB4/BF4DEA08-59C7-42F1-8D03-A15393783D35.png]
+![image](https://user-images.githubusercontent.com/1639828/135190535-6667f594-e9ef-4de9-a08c-95b41addb7ec.png)
