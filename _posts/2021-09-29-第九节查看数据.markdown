@@ -5,7 +5,9 @@ date:   2021-09-29 16:09:28 +0800
 categories: 数据分析
 ---
 上节课我们介绍了 pandas 以及 Series、DataFrame 对象的创建。
+
 ![image](https://user-images.githubusercontent.com/1639828/135190789-f4232f87-b5ec-4cf1-a591-0860df8c69a1.png)
+
 本节课我们来看下如何查看 Series、DataFrame 对象的数据。
 ## 1.查看一部分数据
 我们可以使用 head() 和 tail() 方法来查看 Series 对象或 DataFrame 对象的一小部分数据，默认查看的元素个数为 5 个，head() 展示头部的 5 个元素，tail() 展示尾部的 5 个元素，也可以自定义展示的元素个数。当 Series 对象或 DataFrame 对象包含的数据较多时，使用 head() 或 tail() 查看数据的结构会非常方便。
