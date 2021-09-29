@@ -2,7 +2,7 @@
 layout: post
 title:  "第一节Numpy介绍"
 date:   2021-09-29 08:09:28 +0800
-categories: jekyll update
+categories: 数据分析
 ---
 ## 1.多维数组介绍
 Numpy（Numerical Python 的简称），是 Python 数值计算最重要的基础包之一，大多数提供科学计算的包都以 Numpy 的 ndarray（多维数组）为构建基础。下面我们就通过一些实例来初步了解下 ndarray，要想使用 ndarray，需要导入 numpy 库。
