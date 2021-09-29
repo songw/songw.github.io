@@ -6,7 +6,7 @@ categories: jekyll update
 ---
 上节课我们讲到了如何从 Series 对象或 DataFrame 对象中提取数据。
 
-[image:ACDBEED1-CF65-4627-A703-713BC331D4EE-5375-00000CB3F7D56A7B/01929C1D-F148-4FC6-85BC-C5D5C25D8AB3.png]
+![image](https://user-images.githubusercontent.com/1639828/135191255-a214f534-8e6c-4c66-ac38-09b2ac31bf3f.png)
 
 在进行数据分析的时候，数据集中往往会包含有缺失值。在 pandas 中，用两个值来表示缺失值，一个是 None，一个是 NaN（Not a Number）。本节课我们就来讲下如何处理缺失的数据。
 ## 1.检测缺失数据
@@ -413,4 +413,4 @@ print(df)
 ```
 ## 4.总结
 本节课我们讲述了缺失值的处理。
-[image:D5E543FD-5374-4709-95D4-7D4719086BCA-5375-000028B0DC0B4753/7772FAE3-CAFA-444D-A110-B4167468F15F.png]
+![image](https://user-images.githubusercontent.com/1639828/135191301-a2a093b1-7c9f-41ab-8199-0f1eb984d665.png)
