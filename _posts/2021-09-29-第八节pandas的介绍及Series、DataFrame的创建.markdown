@@ -4,6 +4,8 @@ title:  "第八节pandas的介绍及Series、DataFrame的创建"
 date:   2021-09-29 15:09:28 +0800
 categories: 数据分析
 ---
+前面介绍完了 Numpy，接下来我们介绍 Pandas。
+
 ## 1.Pandas 是什么？
 Pandas 是一个强大的分析结构化数据的工具集；它的使用基础是 Numpy（提供高性能的矩阵运算）；用于数据挖掘和数据分析，同时也提供数据清洗功能。Pandas 的主要数据结构是 Series（一维数据）和 DataFrame（二维数据）。
 ## 2.Series
