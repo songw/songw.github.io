@@ -6,6 +6,7 @@ categories: 网络爬虫
 ---
 
 上次课讲到如何使用 requests 库的 GET 方法来获取页面的 HTML 代码。本节课来讲下如何使用 Beautiful Soup 来解析 HTML 以获取我们想要的信息。
+
 ## 1.安装第三方库 
 ### 1.1 安装 Beautiful Soup
 在命令行下通过 pip 安装  `pip install beautifulsoup4` 。
