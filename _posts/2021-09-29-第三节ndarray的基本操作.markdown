@@ -5,7 +5,7 @@ date:   2021-09-29 10:09:28 +0800
 categories: jekyll update
 ---
 上节课我们讲述了 ndarray 的创建及属性。
-[image:5F41E50A-0D4E-4B34-841E-1AA88288A0FE-3647-000022EB2C8FF5A0/805E0CF1-3AB5-41F6-B4E1-7149AEE7D6AE.png]
+![image](https://user-images.githubusercontent.com/1639828/135186886-d219122c-d635-49de-9e42-376d9e45cafd.png)
 本节课我们讲述 ndarray 的基本操作。在第一节课的时候，我们提到过 ndarray 支持元素方式的操作。下面我们就对 ndarray 支持的操作做一个详细的讲述。
 ## 1.ndarray 和标量之间的运算
 ### 1.1 加法运算
@@ -248,7 +248,7 @@ dot_arr = np.dot(my_arr1, my_arr2)
 print(dot_arr)
 ```
 ndarray 点乘的规则是：
-[image:125753B3-B718-4D44-996B-0084D754B8A1-3647-0000305F9573E9B2/B9273687-7B9B-4F3D-AA9E-2C06C676ABC5.png]
+![image](https://user-images.githubusercontent.com/1639828/135186954-b6fc8771-934a-4de0-afe2-1ec8e74d1ad1.png)
 ndarray 有点要注意的是，只有当矩阵 A 的列数（column）等于矩阵 B 的行数（row）时，A 与 B 才可以相乘。上面的点乘还可以写成如下形式：
 ```python
 import numpy as np
@@ -532,4 +532,4 @@ print(np.cumprod(my_arr, axis=1))
 ```
 上述代码求数组每行的累计积，得到的是一个和原来的数组维度相同的数组。
 ## 5.总结
-[image:E9E160EE-89B0-4DDB-A3FA-83D9C663765E-3647-0000339F17F7819C/0A5040F6-8A3C-4D4C-994D-F3FB10B1FE02.png]
+![image](https://user-images.githubusercontent.com/1639828/135187006-768d16d1-197b-4f41-8ffb-8d0b8875325d.png)
