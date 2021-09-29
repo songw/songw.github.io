@@ -41,7 +41,7 @@ plt.tight_layout()
 plt.show()
 ```
 在上面的代码中，列表 x 代表 4 只队伍，列表 y1、y2、y3 和 y4 分别表示 4 只队伍在 4 局比赛的得分。在进行图形绘制时，在绘制 y2 数据时，设置 bottom = y1，意思是在 y1 数据绘制的条形图的基础进行绘制，也就是形成堆叠图。代码执行完得到的图形如下图所示：
-[image:214E8280-C6D4-40F6-AB90-43B0CD585FFB-689-0001A635DEF372DF/9E6F7C40-BD05-46B8-ABFE-B10DC72F75A0.png]
+![image](https://user-images.githubusercontent.com/1639828/135209689-b2b1b51f-c415-4352-8a41-f14c96f27104.png)
 在上图中，y1 列表对应的条形图在最底部，y2 列表对应的条形图位于 y1 列表对应条形图的上面，后面以此类推。上面的堆叠条形图是垂直方向的，和前面的条形图一样，我们同样的可以绘制水平方向的堆叠条形图。例如：
 ```python
 # importing package
@@ -70,7 +70,7 @@ plt.tight_layout()
 plt.show()
 ```
 在绘制水平方向的堆叠条形图时，需要将参数 bottom 改为 left，将参数 width 改为 height，需要将 x 轴标签改为 Score，y 轴标签改为 Teams。其他的和垂直方向的堆叠条形图的绘制类似。代码执行后得到的图形如下图所示：
-[image:D85AAA39-DEE0-4E91-A1BD-006BB1E12D7F-689-0001A75447CF30CA/33F943EE-9C33-44E9-9B24-3D0ACCF433FD.png]
+![image](https://user-images.githubusercontent.com/1639828/135209746-2579935b-a20a-4779-8eea-a8c02a6ea6b6.png)
 如上图所示，堆叠条形图的方向有垂直变成了水平，但是图例遮挡了部分条形图，下面我们将图例的位置移到右下角。例如：
 ```python
 # importing package
@@ -99,7 +99,7 @@ plt.tight_layout()
 plt.show()
 ```
 在上面的代码中，我们通过设置 legend 函数的 loc 参数来改变图例的位置。
-[image:A0F874BA-0916-437F-B1A1-001252C659D6-689-0001A7F4C43D6DD7/0C24B3A8-80ED-4027-9707-8EBC6C4DFDEA.png]
+![image](https://user-images.githubusercontent.com/1639828/135209793-803355e1-eff2-42f7-b67c-ae4e30970cd5.png)
 如上图所示，我们将图例的位置由右上角改为了右下角。
 ## 3.应用场景
 ### 3.1 适用场景
