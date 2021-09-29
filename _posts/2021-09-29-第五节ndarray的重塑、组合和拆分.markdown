@@ -2,7 +2,7 @@
 layout: post
 title:  "第五节ndarray的重塑、组合和拆分"
 date:   2021-09-29 12:09:28 +0800
-categories: jekyll update
+categories: 数据分析
 ---
 上节课我们讲述了 ndarray 的索引、切片和遍历。
 ![image](https://user-images.githubusercontent.com/1639828/135187529-a865062b-9b81-421c-8bae-2edb73938490.png)
