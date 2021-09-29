@@ -9,6 +9,7 @@ categories: 数据分析
 ![image](https://user-images.githubusercontent.com/1639828/135192864-95c5e9a4-14ab-44de-ae7b-ecea15284256.png)
 
 本节课我们来介绍数据的输入和输出。
+
 ## 1.csv 文件的读取
 csv 文件的读取使用 `read_csv` 方法，将需要读取的文件作为参数传入到 `read_csv` 方法中。例如：
 ```python
