@@ -2,11 +2,11 @@
 layout: post
 title:  "第十五节时间序列"
 date:   2021-09-29 18:09:28 +0800
-categories: jekyll update
+categories: 数据分析
 ---
 上节课我们讲述了 DataFrame 对象的重塑和透视表。
 
-[image:FACEA1C9-E1FA-45F4-A05F-8CCCE48A3295-3895-000066A1D09F7BDB/B4BC5F11-94D9-4E3D-A360-199E38D60875.png]
+![image](https://user-images.githubusercontent.com/1639828/135192356-dd3d6d96-5839-4962-935c-6173fe074d63.png)
 
 本节课我们来讲述时间序列。
 ## 1.时间序列
@@ -121,7 +121,7 @@ print(ts)
 print(ts.index)
 ```
 上面的代码列出了 4、5、6、7月每个月的最后一个工作日。常用的基础频率（不完整）如下图所示：
-[image:1E0CFB1F-5DE7-4E86-96B2-3AFB06C8AAEF-3895-00007F8188E9F8B6/453CC594-1E7D-4E85-B46F-D324A2C991E1.png]
+![image](https://user-images.githubusercontent.com/1639828/135192485-56e1e5f1-b005-457d-8012-45dd94bd4e16.png)
 ### 2.2 非基础频率及日期偏移量
 在 pandas 中，非基础频率可以由一个基础频率和一个乘数组成。例如：
 ```python
@@ -249,7 +249,7 @@ print(ts)
 print(ts.resample('3T').sum())
 ```
 上面的代码中，首先生成一个时间序列，频率为 1 分钟，然后对这个时间序列依据 3 分钟进行降采样。在默认情况下，`label='left’，closed='left'`。如下图所示：
-[image:210C3275-D6B6-4DEA-B65E-A5EF75341B79-3895-0000889DFC359B65/BB6C68B2-24BB-4357-9EB5-EBB7A6C7F463.png]
+![image](https://user-images.githubusercontent.com/1639828/135192569-6072db6b-e9d7-40a9-8a89-423e21a522af.png)
 上面是默认的情况，我们还可以通过参数来指定区间那边是闭合以及聚合面是用区间的开头还是结尾。例如指定 `label='right'`:
 ```python
 from datetime import datetime
@@ -262,7 +262,7 @@ print(ts)
 print(ts.resample('3T', label='right').sum())
 ```
 如下图所示：
-[image:964F6452-586E-4949-9F44-70E5639C3CBD-3895-000088E6BC0ACA47/8FE029B2-C851-4BB3-B081-B63D1205AE70.png]
+![image](https://user-images.githubusercontent.com/1639828/135192636-5e815366-4ad5-4860-bcf6-e0a9b1c47b2b.png)
 指定 `closed='right'`:
 ```python
 from datetime import datetime
@@ -275,7 +275,7 @@ print(ts)
 print(ts.resample('3T', closed='right').sum())
 ```
 如下图所示：
-[image:6F36235D-C9E5-4FAC-9E57-27108E5300C9-3895-000089245572E95C/1A6D58CB-5504-4FB9-B873-6002F1DCB644.png]
+![image](https://user-images.githubusercontent.com/1639828/135192686-4133e931-aa2d-4f55-bc44-1f60b8715caf.png)
 指定 `label='right',closed='right'`:
 ```python
 from datetime import datetime
@@ -288,7 +288,7 @@ print(ts)
 print(ts.resample('3T', closed='right', label='right').sum())
 ```
 如下图所示：
-[image:A0A23A50-87DD-48B6-B1BE-2A8AAC72D39D-3895-0000895690518C05/2963085A-5308-4903-AE3A-56C6E6EB769A.png]
+![image](https://user-images.githubusercontent.com/1639828/135192735-4c38a4a6-d09b-43b9-9126-36f28e01c22c.png)
 ### 4.2 升采样
 在将数据从低频率转换到高频率时，就不需要聚合了。例如：
 ```python
@@ -334,4 +334,4 @@ print(df_daily)
 ```
 上面的代码对升频率的过程中产生的缺失值进行填充。
 ## 5.总结
-[image:E5CDD7CE-3FCB-4004-B209-02A275EC4EDB-3895-00008A38827FD200/344622B7-57EA-45CF-A06D-62D181CC2F09.png]
+![image](https://user-images.githubusercontent.com/1639828/135192811-f83c29dd-e7a6-437f-a2c3-ffa976157524.png)

@@ -2,17 +2,18 @@
 layout: post
 title:  "第十四节重塑和透视表"
 date:   2021-09-29 18:09:28 +0800
-categories: jekyll update
+categories: 数据分析
 ---
 上节课我们讲述了数据的分组及计算。
 
-[image:981A0004-D373-409C-B9CB-D2C5EE13168E-3895-000044FF6DC2C8B8/7A721AAE-A715-4F2C-A11C-4A4B71ABCEC7.png]
+![image](https://user-images.githubusercontent.com/1639828/135192232-dc8117d5-e00e-4af3-9ca0-93eb035d845f.png)
 
 本节课我们来讲述数据的重塑和透视表。
 ## 1.重塑层次化索引
 层次化索引为 DataFrame 数据的重塑提供了一种具有良好一致性的方式。主要功能有二：
 + stack：将数据的列“旋转”为行。
 + unstack：将数据的行“旋转”为列。
+
 ```python
 import numpy as np
 import pandas as pd
@@ -281,4 +282,4 @@ print(df.pivot_table(index=['City'], columns=['Date time'], aggfunc='sum'))
 ```
 ## 3.总结
 本节课我们讲述了 DataFrame 对象的重塑和对 DataFrame 对象进行透视。
-[image:B61C2453-599C-4A00-9EE0-041DA7E1C44B-3895-00006698EEF368AF/B4BC5F11-94D9-4E3D-A360-199E38D60875.png]
+![image](https://user-images.githubusercontent.com/1639828/135192312-7a6ccab3-358b-42ce-b8ba-2332049acbdd.png)

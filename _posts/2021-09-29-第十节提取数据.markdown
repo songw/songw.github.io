@@ -2,11 +2,11 @@
 layout: post
 title:  "第十节提取数据"
 date:   2021-09-29 17:09:28 +0800
-categories: jekyll update
+categories: 数据分析
 ---
 上节课我们讲述了如何查看数据。
 
-[image:8B0CF40C-B159-4659-93E0-70268F2EBA7A-5375-0000070B599A3914/64038F23-8C48-49FB-879D-777505F0006D.png]
+![image](https://user-images.githubusercontent.com/1639828/135191036-836da2be-8be9-40bc-86e6-445bf630baa6.png)
 
 本节课我们来讲述如何选择数据。
 ## 1.Series
@@ -272,4 +272,4 @@ print(df.iloc[0:4, 0:3])
 ```
 ## 3.总结
 本节课我们讲述了如何提取 Series 对象或 DataFrame 对象的数据。
-[image:7469FC07-8849-4751-8F9A-F1E0F1A277E1-5375-00000CA17CF11EBF/01929C1D-F148-4FC6-85BC-C5D5C25D8AB3.png]
+![image](https://user-images.githubusercontent.com/1639828/135191137-f84f1f92-f613-4dfc-bf55-d8295317f935.png)

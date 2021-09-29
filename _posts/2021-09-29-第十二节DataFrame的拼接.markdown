@@ -2,11 +2,11 @@
 layout: post
 title:  "第十二节DataFrame的拼接"
 date:   2021-09-29 18:09:28 +0800
-categories: jekyll update
+categories: 数据分析
 ---
 上节课我们讲述了缺失数据的处理。
 
-[image:BDD7374F-0F83-46C3-AFDF-F5ECEDDCDD7B-5375-00002C00C14959AA/7772FAE3-CAFA-444D-A110-B4167468F15F.png]
+![image](https://user-images.githubusercontent.com/1639828/135191831-10092afa-1c01-4f45-93ef-cc70569dfa03.png)
 
 本节课我们来讲述 DataFrame 的拼接。
 
@@ -217,7 +217,7 @@ df2 = pd.DataFrame({'rname': ['Alice', 'Bob', 'Deniel'],
 print(pd.merge(df1, df2, left_on='lname', right_on='rname'))
 ```
 上面的连接方式默认为 inner，此外其他的连接方式还有 left、right 以及 outer。它们的连接规则是：
-[image:C4372B26-3AC5-45A8-8D0C-9652B5C7BFEC-5375-0000452DBA3905C2/96911C87-6398-4404-A9CB-556D508C4540.png]
+![image](https://user-images.githubusercontent.com/1639828/135191950-9dad08ed-88b8-4a27-99ba-8aa9ef23a355.png)
 我们以刚才的例子为例，来看看各自的输出结果。
 ```python
 import numpy as np
@@ -426,4 +426,4 @@ print(pd.merge(df1, df2, left_index=True, right_index=True))
 ```
 ## 3.总结
 本节课我们讲述了如何使用 concat()、merge() 对 DataFrame 进行拼接。
-[image:5ECAC6E9-8D27-4287-A86D-580A5328E2E1-5375-00007296EC3BB3E7/461A5E1A-AF62-4BA1-970E-8B66F8F35FB8.png]
+![image](https://user-images.githubusercontent.com/1639828/135192012-b36f426e-deab-424b-b911-3181312daefc.png)

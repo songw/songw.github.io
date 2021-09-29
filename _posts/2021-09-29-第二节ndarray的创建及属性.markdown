@@ -2,12 +2,16 @@
 layout: post
 title:  "第二节ndarray的创建及属性"
 date:   2021-09-29 09:09:28 +0800
-categories: jekyll update
+categories: 数据分析
 ---
 上节课我们介绍了 numpy 的多维数组以及多维数组相对于列表的优势。
+
 ![image](https://user-images.githubusercontent.com/1639828/135186664-b79612ec-ee54-414f-8133-088514d71460.png)
+
 ## 1.ndarray 的创建及获取属性
-上节课我们有提到过 ndarray 的创建，我只需要将列表传入到 np.array() 函数中。例如：
+上节课我们有提到过 ndarray 的创建，我只需要将列表传入到 np.array() 函数中。
+
+例如：
 ```python
 import numpy as np
 

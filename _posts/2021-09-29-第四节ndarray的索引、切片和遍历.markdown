@@ -2,10 +2,12 @@
 layout: post
 title:  "第四节ndarray的索引、切片和遍历"
 date:   2021-09-29 11:09:28 +0800
-categories: jekyll update
+categories: 数据分析
 ---
 上节课我们讲述了 ndarray 的基本操作。
+
 ![image](https://user-images.githubusercontent.com/1639828/135187325-02b81fdb-7e0c-4158-aa87-420de65f7b5c.png)
+
 本节课我们来讲述 ndarray 的索引、切片和遍历。
 ## 1.索引
 ### 1.1 一维数组的索引

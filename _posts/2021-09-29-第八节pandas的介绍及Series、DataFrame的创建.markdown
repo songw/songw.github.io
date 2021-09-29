@@ -2,8 +2,10 @@
 layout: post
 title:  "第八节pandas的介绍及Series、DataFrame的创建"
 date:   2021-09-29 15:09:28 +0800
-categories: jekyll update
+categories: 数据分析
 ---
+前面介绍完了 Numpy，接下来我们介绍 Pandas。
+
 ## 1.Pandas 是什么？
 Pandas 是一个强大的分析结构化数据的工具集；它的使用基础是 Numpy（提供高性能的矩阵运算）；用于数据挖掘和数据分析，同时也提供数据清洗功能。Pandas 的主要数据结构是 Series（一维数据）和 DataFrame（二维数据）。
 ## 2.Series
@@ -299,4 +301,4 @@ print(df)
 在上面的代码中，我们通过元组的列表来创建 DataFrame 对象，在创建 DataFrame 对象时，通过 index 参数来指定行索引，通过 columns 来指定列索引。
 ## 4.总结
 本节课我们介绍了 Pandas 以及它的两个重要数据结构 Series 和 DataFrame，接下来介绍了 Series 对象以及 DataFrame 对象的创建。
-[image:5183C50D-92CC-4111-96C8-2FF1DAE65E9F-3647-000117094D2A2DB4/BF4DEA08-59C7-42F1-8D03-A15393783D35.png]
+![image](https://user-images.githubusercontent.com/1639828/135190535-6667f594-e9ef-4de9-a08c-95b41addb7ec.png)

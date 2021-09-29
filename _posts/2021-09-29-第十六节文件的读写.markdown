@@ -2,11 +2,14 @@
 layout: post
 title:  "第十六节文件的读写"
 date:   2021-09-29 19:09:28 +0800
-categories: jekyll update
+categories: 数据分析
 ---
 上节课我们介绍了时间序列。
-[image:D84EE7E0-4F5E-4E4D-98EF-2BBD4558E6A7-3895-00008FD95F727058/344622B7-57EA-45CF-A06D-62D181CC2F09.png]
+
+![image](https://user-images.githubusercontent.com/1639828/135192864-95c5e9a4-14ab-44de-ae7b-ecea15284256.png)
+
 本节课我们来介绍数据的输入和输出。
+
 ## 1.csv 文件的读取
 csv 文件的读取使用 `read_csv` 方法，将需要读取的文件作为参数传入到 `read_csv` 方法中。例如：
 ```python
@@ -141,4 +144,4 @@ df.to_csv('out4.csv',index=False,columns=['PLAYER','POSITION', 'TEAM', 'POINTS']
 上面的例子中，我们便只列出了 PLAYER、POSITION、TEAM 和 POINTS 这几列。
 ## 3.总结
 本节课我们讲述了 csv 文件的读取和写入。
-[image:81C405D0-7011-49C3-8919-301E0B377ED3-3895-00009CAD2591AEB1/075B9A40-53D1-4034-ADE9-9BCB3F082A75.png]
+![image](https://user-images.githubusercontent.com/1639828/135192933-10e2c725-451f-4e82-8942-f3426e2280ea.png)

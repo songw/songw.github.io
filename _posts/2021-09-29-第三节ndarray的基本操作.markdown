@@ -2,10 +2,12 @@
 layout: post
 title:  "第三节ndarray的基本操作"
 date:   2021-09-29 10:09:28 +0800
-categories: jekyll update
+categories: 数据分析
 ---
 上节课我们讲述了 ndarray 的创建及属性。
+
 ![image](https://user-images.githubusercontent.com/1639828/135186886-d219122c-d635-49de-9e42-376d9e45cafd.png)
+
 本节课我们讲述 ndarray 的基本操作。在第一节课的时候，我们提到过 ndarray 支持元素方式的操作。下面我们就对 ndarray 支持的操作做一个详细的讲述。
 ## 1.ndarray 和标量之间的运算
 ### 1.1 加法运算
