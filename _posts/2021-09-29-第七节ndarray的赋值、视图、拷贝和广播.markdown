@@ -5,7 +5,7 @@ date:   2021-09-29 14:09:28 +0800
 categories: jekyll update
 ---
 上节课我们讲述了用于 ndarray 的文件操作。
-![image](https://user-images.githubusercontent.com/1639828/135187995-34b836ab-5ccb-4e1f-9b0c-93ad535af356.png)
+![image](https://user-images.githubusercontent.com/1639828/135188109-0b517145-a30b-4827-9b5d-ca7da6d4729e.png)
 本节课我们来讲述 ndarray 的赋值、视图、拷贝和广播。
 ## 1.赋值
 ```python
@@ -112,7 +112,9 @@ print(demeaned)
 print(demeaned.mean(0))
 ```
 在上面的例子中，`my_arr1.mean(0)` 是一个 1 行 3 列的数组，当我们用一个 4 行 3 列的数组减去一个 1 行 3 列的数组时，便会对 1 行 3 列的数组进行广播。广播过程的图形化如下图所示：
-![image](https://user-images.githubusercontent.com/1639828/135188028-32a1fb98-ee2e-47af-8d5f-a50e49303fd6.png)
+![image](https://user-images.githubusercontent.com/1639828/135188171-210c06be-2475-44d8-b7fb-d4c09b32732c.png)
 
 ## 5.总结
-![Uploading image.png…]()
+![image](https://user-images.githubusercontent.com/1639828/135188190-08ce539f-9d7c-4f9f-b7bb-a763f84afb9c.png)
+
+import numpy as np
