@@ -1,0 +1,291 @@
+---
+layout: post
+title:  "第三节HTML简介"
+date:   2021-07-29 11:09:28 +0800
+categories: 数据可视化
+---
+
+在上次课中，我们讲到在访问豆瓣网的主页时，响应体的数据格式为 HTML 代码。爬虫的目的就是自动化地获取网站的 html 代码并从中解析出我们想要的信息。本节课我们就来简要介绍下 html。
+## 1.什么是 HTML？
+1. HTML 叫做超文本标记语言。
+2. HTML 是构建网页的标准语言。
+3. HTML 描述了网页的结构。
+4. HTML 是由一系列的元素组成的。
+5. 浏览器根据 HTML 元素来解释页面的内容。
+6. HTML 的元素给内容打上了相应的标签，例如：这是一个标题，这是一个链接等等。
+## 2.什么是 HTML 元素？
+HTML 是由一系列的元素组成的，那么什么是 HTML 元素呢？元素是由开始标签、内容和结束标签组成的。
+[image:B27190ED-4C5F-4E1C-9E95-4ACD7FF0639E-937-0000967F333641C5/元素.png]
+1. 开始标签（Opening tag）：包含元素的名称（本例为 p），被左、右尖括号包围，表示元素由这里开始。
+2. 结束标签（Closing tag）：与开始标签相似，只是在元素名之前包含了一个斜杠，表示元素的结尾。
+3. 内容（Content）：元素的内容，本例中就是所输入的文本本身。
+4. 元素（Element）：开始标签、结束标签与内容相结合，便是一个完整的元素。
+## 3.一个简单的示例
+由于豆瓣网主页的 HTML 代码有 2000 多行，如果拿豆瓣网主页的 HTML 代码来讲解的话显得有点复杂了。所以我们从一个简单的 HTML 代码讲起。下图为一个简单的页面：
+[image:CF11B3DF-C947-4178-BE98-D5D259F5A4EE-937-00008511A73695EB/WX20210521-112631@2x.png]
+对应的 HTML 代码为：
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>我的 Web 页面</title>
+  </head>
+  <body>
+    <h1>Python 是一门优雅的语言。</h1>
+    <img src="images/Python.png" alt="Python 语言 Logo" />
+
+    <p>使用 Python，我们可以做许多事情。</p>
+
+    <ul>
+      <li>Web 开发</li>
+      <li>网络爬虫</li>
+      <li>数据分析</li>
+      <li>人工智能与机器学习</li>
+      <li>自动化运维</li>
+      <li>游戏开发</li>
+    </ul>
+
+    <p>人生苦短，我用 Python。</p>
+
+    <p>
+      如果想了解更多的 Python 语言的相关知识，可以查看
+      <a href="https://docs.python.org/zh-cn/3/">Python 官方文档</a>。
+    </p>
+  </body>
+</html>
+```
+在上面代码中：
++ `<!DOCTYPE html>`: 声明文档的类型为 HTML5 文档。
++ `<html></html>` 元素为 HTML 页面的根元素，它包裹了整个完整的页面。
++ `<head></head>` 元素包含了 HTML 页面的元信息，包括你想在搜索结果中出现的关键字和页面描述，CSS 样式，字符集声明等等。
++ `<meta charset="UTF-8" />` 元素设置文档使用 utf-8 字符集编码。将文档的字符集编码设置成 utf-8 可以避免许多问题，毫无疑问我们应该使用 utf-8 编码。
++ `<title></title>` 元素设置了 HTML 页面的标题，可以在浏览器的标签上看到，当你标记或收藏页面时它可用来描述页面。
++ `<body></body>` 元素包含了访问页面时，你在页面上看到的内容，包括标题、段落、图片、超链、表格、列表等等。
+## 4.元素
+### 4.1 页面标题
+代码：
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>我的 Web 页面</title>
+  </head>
+  <body></body>
+</html>
+```
+相应的页面如下：
+[image:A40E44FC-8F97-4061-BBC2-9314369E96C9-937-000091B71B5FBB97/代码 1 页面 key.png]
+图片中标红的便是页面的标题，是通过 `<title></title>` 元素设置的。
+### 4.2 内容标题
+代码：
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>我的 Web 页面</title>
+  </head>
+  <body>
+    <h1>Python 是一门优雅的语言。</h1>
+  </body>
+</html>
+```
+相应的页面如下：
+[image:C5D3E4E7-9654-418F-992D-0094B3E667C1-937-000091D9A198618A/代码 2 页面 key.png]
+图中标红的为一级标题，是由 `<h1></h1>` 元素设置的。HTML 标题（Heading）是通过 `<h1> ~ <h6>` 等元素进行定义的。`<h1>` 标签定义了最重要的标题，`<h6>` 标签定义了最不重要的标题。例如，有如下代码：
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>我的 Web 页面</title>
+  </head>
+  <body>
+    <h1>This is heading 1</h1>
+    <h2>This is heading 2</h2>
+    <h3>This is heading 3</h3>
+    <h4>This is heading 4</h4>
+    <h5>This is heading 5</h5>
+    <h6>This is heading 6</h6>
+  </body>
+</html>
+```
+相应的页面如下：
+[image:DBA4C6CF-15FC-467F-90D6-49C6EC4F8B30-937-0000987B80D440CD/标题 key.png]
+### 4.3 图像
+代码
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>我的 Web 页面</title>
+  </head>
+  <body>
+    <h1>Python 是一门优雅的语言。</h1>
+    <img src="images/Python.png" alt="Python 语言 Logo" />
+  </body>
+</html>
+```
+相应的页面如下：
+[image:2C21AC13-A437-4804-99EF-9E152BB64C30-937-000092570EC90217/代码 3 页面 key.png]
+图中的 Python Logo 图像是由 `<img>` 元素设置的。`<img>` 元素会将图像嵌在页面中 `<img>` 元素出现的地方。这是通过 `src` 属性来实现的，属性的值为图像的路径。元素里还包含了 `alt` 属性，此属性是对图像的文字描述。图像的文字描述有如下作用：1. 有视觉障碍的人士在浏览网页时，可以通过屏幕阅读器来阅读图片的文字描述进而了解图片的内容。2. 由于某些原因图像无法展示时，图像的文字描述将出现在图像应该出现的地方。
+
+例如，当故意修改图像的路径，使得图像访问不到时，这时候便会出现图像的描述文字。例如，有如下代码：
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>我的 Web 页面</title>
+  </head>
+  <body>
+    <h1>Python 是一门优雅的语言。</h1>
+    <img src="images/../Python.png" alt="Python 语言 Logo" />
+  </body>
+</html>
+```
+相应的页面如下：
+[image:AA0DB846-CA66-4E46-A943-EF42A019A154-937-0000A018923EBA10/代码 10 页面 key.png]
+### 4.4 段落
+代码
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>我的 Web 页面</title>
+  </head>
+  <body>
+    <h1>Python 是一门优雅的语言。</h1>
+    <img src="images/Python.png" alt="Python 语言 Logo" />
+
+    <p>使用 Python，我们可以做许多事情。</p>
+  </body>
+</html>
+```
+相应的页面如下：
+[image:1FE9A96F-2C08-4D73-A4E7-2597E2AEA766-937-0000929D96538C16/代码 4 页面 key.png]
+图中标红的文字为一个段落，是由 `<p></p>` 元素设置的。一个新的段落会另起一行，浏览器会自动地在段首和段尾加上一些空格。通过在 HTML 代码中添加额外的空格和空行是没办法改变页面的展示的。因为在页面展示的时候，浏览器会自动地去掉额外的空格和空行。例如，有如下代码：
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>我的 Web 页面</title>
+  </head>
+  <body>
+    <p>
+        This paragraph
+
+        contains a lot of lines
+        in the source code,
+        but the browser
+        ignores it.
+    </p>
+        
+    <p>
+        This paragraph
+        
+        contains         a lot of spaces
+        in the source         code,
+        but the        browser
+        ignores it.
+    </p>
+  </body>
+</html>
+```
+相应的页面如下：
+[image:BAE9BDAF-8354-4FAE-8E9F-7DDC8240843A-937-00009EF3EA2183BC/代码 8 页面 key.png]
+HTML 代码中的空格和空行都被去掉了。
+### 4.5 列表
+代码
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>我的 Web 页面</title>
+  </head>
+  <body>
+    <h1>Python 是一门优雅的语言。</h1>
+    <img src="images/Python.png" alt="Python 语言 Logo" />
+
+    <p>使用 Python，我们可以做许多事情。</p>
+
+    <ul>
+      <li>Web 开发</li>
+      <li>网络爬虫</li>
+      <li>数据分析</li>
+      <li>人工智能与机器学习</li>
+      <li>自动化运维</li>
+      <li>游戏开发</li>
+    </ul>
+  </body>
+</html>
+```
+相应的页面如下：
+[image:D81269C8-39DE-4EAD-9D92-C58D02502DA8-937-0000940FA93C549B/代码 5 页面 key.png]
+图中标红的为一个列表，是由 `<ul></ul>` 元素设置的，列表中的每个项目是由元素 `<li></li>` 设置的。以标签 `<ul>` 开始的列表为无序列表。相应地，HTML 还提供了有序列表。有序列表以标签 `<ol>` 开始。例如，有如下代码：
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>我的 Web 页面</title>
+  </head>
+  <body>
+    <ol>
+      <li>Web 开发</li>
+      <li>网络爬虫</li>
+      <li>数据分析</li>
+      <li>人工智能与机器学习</li>
+      <li>自动化运维</li>
+      <li>游戏开发</li>
+    </ol>
+  </body>
+</html>
+```
+相应的页面如下：
+[image:FA8D13CA-D4A6-4E3E-B96C-828DC6AAEF70-937-00009F7EC73A0CA6/代码 9 页面 key.png]
+有序列表会在每个项目的前面添加一个序号。
+### 4.6 链接
+代码
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>我的 Web 页面</title>
+  </head>
+  <body>
+    <h1>Python 是一门优雅的语言。</h1>
+    <img src="images/Python.png" alt="Python 语言 Logo" />
+
+    <p>使用 Python，我们可以做许多事情。</p>
+
+    <ul>
+      <li>Web 开发</li>
+      <li>网络爬虫</li>
+      <li>数据分析</li>
+      <li>人工智能与机器学习</li>
+      <li>自动化运维</li>
+      <li>游戏开发</li>
+    </ul>
+
+    <p>人生苦短，我用 Python。</p>
+
+    <p>
+      如果想了解更多的 Python 语言的相关知识，可以查看
+      <a href="https://docs.python.org/zh-cn/3/">Python 官方文档</a>。
+    </p>
+  </body>
+</html>
+```
+相应的页面如下：
+[image:C73D754D-13EB-478A-8569-0306B4D20856-937-0000954E6E2885A5/代码 7 页面 key.png]
+图中标红的部分为一个链接，是由 `<a></a>` 元素设置的。`<a></a>` 元素的 `href` 属性为链接的地址。`<a></a>` 元素的内容（Python 官方文档）会显示在页面上，当我们点击Python 官方文档时，将会跳转到目的页面。我们不仅可以设置页面的链接，还可以设置图片、文件等的链接。
+## 5.总结
+本节课，我们简要介绍了 HTML 的相关知识，包括什么是标签、元素以及属性等。
