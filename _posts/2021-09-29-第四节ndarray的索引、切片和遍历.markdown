@@ -5,7 +5,7 @@ date:   2021-09-29 11:09:28 +0800
 categories: jekyll update
 ---
 上节课我们讲述了 ndarray 的基本操作。
-[image:E8372372-C562-4994-ADCA-E24D5D92EF74-3647-0000381080EFEA05/0A5040F6-8A3C-4D4C-994D-F3FB10B1FE02.png]
+![image](https://user-images.githubusercontent.com/1639828/135187325-02b81fdb-7e0c-4158-aa87-420de65f7b5c.png)
 本节课我们来讲述 ndarray 的索引、切片和遍历。
 ## 1.索引
 ### 1.1 一维数组的索引
@@ -114,7 +114,7 @@ print(my_arr[[0, 2], :])
 print(my_arr[::-1])
 ```
 针对上述代码，大家要对照每行代码的输出弄明白为什么会输出上述结果。为了方便大家的理解，使用更加形象化的图形方式来做个说明：
-[image:DDF4C4C7-C1CA-438A-AED5-E3141DC789E4-3647-00004193334E3C5A/3436B341-7B9E-477F-BC15-AD3AD447A089.png]
+![image](https://user-images.githubusercontent.com/1639828/135187408-e353fab9-53c7-4735-a9dd-3cc33e985136.png)
 ## 3.遍历
 除了索引和切片之外，我们还可以对 ndarray 进行遍历操作。我们通过实例来看下 ndarray 的遍历。
 ```python
@@ -170,4 +170,4 @@ for i in np.nditer(my_arr, order='F'):
     print(i)
 ```
 ## 4.总结
-[image:91D25E7C-3189-4C73-8F25-97AC6B4E4272-3647-000042D243F07A9E/D1A0BA25-5967-417E-989B-C0A79B3E09FE.png]
+![image](https://user-images.githubusercontent.com/1639828/135187481-cac679f0-bb5d-47ff-b228-10f6d114aa60.png)
