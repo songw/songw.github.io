@@ -29,7 +29,7 @@ plt.tight_layout()
 plt.show()
 ```
 在上面的代码中，我们只要将一个列表传入到 pie 函数中，便可以绘制一个饼图。代码执行后得到的图形如下图所示：
-[image:88EE24E5-5B7A-4902-8BB9-AB26A8D118B7-689-000188ABE5DB1B5F/6D09BFD1-118A-4206-B8EF-B5D0D35BBCEF.png]
+![image](https://user-images.githubusercontent.com/1639828/135200989-5ddc5388-2e5f-4ca1-bf2a-122cfeca970e.png)
 从上面的饼图中我们不知道每个扇形所代表的数据，下面来为每个扇形打上标签。
 ```python
 import matplotlib.pyplot as plt
@@ -45,7 +45,7 @@ plt.tight_layout()
 plt.show()
 ```
 为了给每个扇形打上标签，我们只需要传入参数 labels 即可。代码执行后得到的图形如下图所示：
-[image:6012E5F2-1DF7-41E5-AC3E-695636429EF2-689-000188D2D992934D/C508037A-B7CA-4BCA-BA15-45689C1A4B20.png]
+![image](https://user-images.githubusercontent.com/1639828/135209003-9e2f79ec-41e5-4914-a481-9908543ee6d7.png)
 除了给每个扇形打上标签之外，我们还可以把每个扇形的占比标在图形上，例如：
 ```python
 import matplotlib.pyplot as plt
@@ -61,7 +61,7 @@ plt.tight_layout()
 plt.show()
 ```
 上面的代码中，我们通过参数 autopct 为每个扇形标上占比。代码执行后得到的图形如下图所示：
-[image:3FEB8A7C-7658-4E96-ACED-1156134B93A7-689-0001892EF71D5ADD/3006EBE4-F1B0-4AE3-B06B-9AD0CA5D5177.png]
+![image](https://user-images.githubusercontent.com/1639828/135209062-bbc3938c-e083-40a4-88ce-d72165b5026e.png)
 上图中扇形从大到小排列的方向是逆时针的，一般情况下，我们比较习惯顺时针的方向，下面我们通过参数来设置成顺时针方向，例如：
 ```python
 import matplotlib.pyplot as plt
@@ -78,7 +78,7 @@ plt.tight_layout()
 plt.show()
 ```
 上面代码中，通过设置参数 counterclock 为 False，使得方向改为顺时针方向，通过设置参数 startangle 为 90，将最大扇形放在 12 点钟方向。代码执行后得到的图形如下图所示：
-[image:E7A3ED0E-BD4A-49FF-AF96-9844704516C6-689-000189623F58046E/2632674A-EF7D-44DC-87E7-4366C11B9EE1.png]
+![image](https://user-images.githubusercontent.com/1639828/135209157-c2e2886c-669d-4e0d-8f05-3b3d2f7974e0.png)
 有时候，为了强调某一个扇形，我们会让这个扇形脱离整个圆形。例如：
 ```python
 import matplotlib.pyplot as plt
@@ -96,7 +96,7 @@ plt.tight_layout()
 plt.show()
 ```
 在上面的代码中，我们通过设置参数 explode 来强调 SQL 这个扇形，要强调那个扇形，就把相应的值设置成非 0。代码执行后得到的图形如下图所示：
-[image:A1AC3D34-8D7F-45AC-B17F-83299B013D58-689-00018A035B0BF5DE/0E8FEB03-AC50-4703-8F65-A9346D974EF6.png]
+![image](https://user-images.githubusercontent.com/1639828/135209200-f83f1814-0967-4ad4-9b01-e1d9a91f2bb9.png)
 ## 3.应用场景
 ### 3.1 适用场景
 + 想要突出表示某个部分在整体中所占比例，尤其该部分所占比例达到总体的25%或50%时。
