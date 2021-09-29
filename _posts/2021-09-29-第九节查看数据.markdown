@@ -2,7 +2,7 @@
 layout: post
 title:  "第九节查看数据"
 date:   2021-09-29 16:09:28 +0800
-categories: jekyll update
+categories: 数据分析
 ---
 上节课我们介绍了 pandas 以及 Series、DataFrame 对象的创建。
 ![image](https://user-images.githubusercontent.com/1639828/135190789-f4232f87-b5ec-4cf1-a591-0860df8c69a1.png)
