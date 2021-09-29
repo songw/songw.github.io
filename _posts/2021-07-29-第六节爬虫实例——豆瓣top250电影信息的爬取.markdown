@@ -5,22 +5,23 @@ date:   2021-07-29 12:09:28 +0800
 categories: 网络爬虫
 ---
 
-介绍完前面的基础知识后，本节通过一个具体的实例来看下编写爬虫的具体过程。以爬取豆瓣网 top250 电影的信息为例，top250 电影的网址为：
-https://movie.douban.com/top250。在浏览器的地址栏里输入 https://movie.douban.com/top250，我们会看到如下内容：
+介绍完前面的基础知识后，本节通过一个具体的实例来看下编写爬虫的具体过程。
 
-[image:7DCB52BA-16BE-4818-A979-4414B997041B-62056-0000E61181F7E8E2/290EFE99-A36B-4CB2-89E0-2965CC3F59EF.png]
+以爬取豆瓣网 top250 电影的信息为例，top250 电影的网址为：https://movie.douban.com/top250。在浏览器的地址栏里输入 https://movie.douban.com/top250，我们会看到如下内容：
+
+![image](https://user-images.githubusercontent.com/1639828/135230712-dca53e92-05cb-4b82-8c22-bb5692fff503.png)
 
 对于每一部电影需要爬取的内容如下图所示：
 
-[image:960E87E5-49AB-4B85-A012-288D6CC0189B-62056-0000E7B6E328E2CD/C1679C2B-A4DA-4728-B07B-98CD2ADADD94.png]
+![image](https://user-images.githubusercontent.com/1639828/135230767-e134fdbb-a9f2-49a3-8a9e-3e7d42a7b979.png)
 
 如上图所示，爬取的内容包括电影排名、电影名称、电影评分、电影属于哪个国家、电影类型、电影的上映时间以及电影的导演、主演。了解了要爬取哪些内容之后，接下来需要知道这些内容对应的 html 内容。
 
-[image:E74A2FFD-196E-4805-9F7F-9E73A9F0443A-62056-0000E8D61747987A/83E00E90-A0A7-4CEC-A944-D45171C7F585.png]
+![image](https://user-images.githubusercontent.com/1639828/135230817-388b357f-aed4-472a-8680-84b5a9d51b5c.png)
 
 知道了对应的 html 内容之后，接下来就是解析 html，获取我们想要的内容。下面我们就逐步介绍爬取的过程：
 ## 1.获取 html
-[image:3E35B0C6-2752-49C0-AA28-47D4F921E742-62056-0000E91D301E59E6/25658ADE-7479-44E0-B731-D7C0692679DB.png]
+![image](https://user-images.githubusercontent.com/1639828/135230900-e2bdf10c-b486-4a8a-bae4-fd9797175d55.png)
 
 如上图所示，由于每页只展示 25 个电影的信息，要想获取所有电影的信息，需要通过一个循环来获取全部 10 页的内容。
 ### 1.1 导入所需的第三方库
@@ -162,7 +163,7 @@ with open('top250.csv', 'w') as file:
 ```
 ## 5.结果
 将获取到的内容存储到 csv 文件中。csv 文件的部分内容如下图所示：
-[image:DC5EC06C-B63D-48E9-BB32-BA60455EFD3F-62056-0000EA6001520FF7/A8D13667-F1DF-4D4F-9416-F4473379DCA6.png]
+![image](https://user-images.githubusercontent.com/1639828/135230972-6295f20c-6766-455d-bea5-90fa2851ad53.png)
 这样我们便完成了豆瓣 top250 电影信息的爬取。
 ## 6.总结
 本节我们通过一个实例熟悉了爬虫的爬取过程。
