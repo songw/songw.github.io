@@ -1,0 +1,111 @@
+---
+layout: post
+title:  "第七节堆叠条形图"
+date:   2021-08-29 12:09:28 +0800
+categories: 数据可视化
+---
+
+上节课我们讲述了热力图的绘制，本节课我们来讲述堆叠条形图的绘制。
+
+## 1.什么是堆叠条形图？
+
+上节课我们介绍了热力图，本节课我们来讲述堆叠条形图。堆叠条形图是一种用来分解整体、比较各部分的图。与条形图类似，堆叠条形图常被用于比较不同类别的数值。而且，它的每一类数值内部，又被划分为多个子类别，这些子类别一般用不同的颜色来表示。
+
+如果说条形图可以帮助我们观察总量，那么堆叠条形图则可以同时反映总量与结构，即总量是多少？它又是由哪些部分构成的？进而，我们还可以探究哪一部分比例最大，以及每一部分的变动情况等等。
+## 2.堆叠条形图的绘制
+堆叠条形图的绘制和条形图类似，同样是调用 bar 函数，只不过在参数设置时稍有区别，例如：
+```python
+# importing package
+import matplotlib.pyplot as plt
+import numpy as np
+
+plt.style.use('fivethirtyeight')
+  
+x = ['A', 'B', 'C', 'D']
+y1 = np.array([10, 20, 10, 30])
+y2 = np.array([20, 25, 15, 25])
+y3 = np.array([12, 15, 19, 6])
+y4 = np.array([10, 29, 13, 19])
+  
+plt.bar(x, y1, label='Round1', width=0.67)
+plt.bar(x, y2, bottom=y1, label='Round2', width=0.67)
+plt.bar(x, y3, bottom=y1+y2, label='Round3', width=0.67)
+plt.bar(x, y4, bottom=y1+y2+y3, label='Round4', width=0.67)
+
+plt.xlabel("Teams")
+plt.ylabel("Score")
+plt.legend()
+plt.title("Scores by Teams in 4 Rounds")
+
+plt.tight_layout()
+plt.show()
+```
+在上面的代码中，列表 x 代表 4 只队伍，列表 y1、y2、y3 和 y4 分别表示 4 只队伍在 4 局比赛的得分。在进行图形绘制时，在绘制 y2 数据时，设置 bottom = y1，意思是在 y1 数据绘制的条形图的基础进行绘制，也就是形成堆叠图。代码执行完得到的图形如下图所示：
+[image:214E8280-C6D4-40F6-AB90-43B0CD585FFB-689-0001A635DEF372DF/9E6F7C40-BD05-46B8-ABFE-B10DC72F75A0.png]
+在上图中，y1 列表对应的条形图在最底部，y2 列表对应的条形图位于 y1 列表对应条形图的上面，后面以此类推。上面的堆叠条形图是垂直方向的，和前面的条形图一样，我们同样的可以绘制水平方向的堆叠条形图。例如：
+```python
+# importing package
+import matplotlib.pyplot as plt
+import numpy as np
+
+plt.style.use('fivethirtyeight')
+  
+x = ['A', 'B', 'C', 'D']
+y1 = np.array([10, 20, 10, 30])
+y2 = np.array([20, 25, 15, 25])
+y3 = np.array([12, 15, 19, 6])
+y4 = np.array([10, 29, 13, 19])
+  
+plt.barh(x, y1, label='Round1', height=0.67)
+plt.barh(x, y2, left=y1, label='Round2', height=0.67)
+plt.barh(x, y3, left=y1+y2, label='Round3', height=0.67)
+plt.barh(x, y4, left=y1+y2+y3, label='Round4', height=0.67)
+
+plt.xlabel("Score")
+plt.ylabel("Teams")
+plt.legend()
+plt.title("Scores by Teams in 4 Rounds")
+
+plt.tight_layout()
+plt.show()
+```
+在绘制水平方向的堆叠条形图时，需要将参数 bottom 改为 left，将参数 width 改为 height，需要将 x 轴标签改为 Score，y 轴标签改为 Teams。其他的和垂直方向的堆叠条形图的绘制类似。代码执行后得到的图形如下图所示：
+[image:D85AAA39-DEE0-4E91-A1BD-006BB1E12D7F-689-0001A75447CF30CA/33F943EE-9C33-44E9-9B24-3D0ACCF433FD.png]
+如上图所示，堆叠条形图的方向有垂直变成了水平，但是图例遮挡了部分条形图，下面我们将图例的位置移到右下角。例如：
+```python
+# importing package
+import matplotlib.pyplot as plt
+import numpy as np
+
+plt.style.use('fivethirtyeight')
+  
+x = ['A', 'B', 'C', 'D']
+y1 = np.array([10, 20, 10, 30])
+y2 = np.array([20, 25, 15, 25])
+y3 = np.array([12, 15, 19, 6])
+y4 = np.array([10, 29, 13, 19])
+  
+plt.barh(x, y1, label='Round1', height=0.67)
+plt.barh(x, y2, left=y1, label='Round2', height=0.67)
+plt.barh(x, y3, left=y1+y2, label='Round3', height=0.67)
+plt.barh(x, y4, left=y1+y2+y3, label='Round4', height=0.67)
+
+plt.xlabel("Score")
+plt.ylabel("Teams")
+plt.legend(loc='lower right')
+plt.title("Scores by Teams in 4 Rounds")
+
+plt.tight_layout()
+plt.show()
+```
+在上面的代码中，我们通过设置 legend 函数的 loc 参数来改变图例的位置。
+[image:A0F874BA-0916-437F-B1A1-001252C659D6-689-0001A7F4C43D6DD7/0C24B3A8-80ED-4027-9707-8EBC6C4DFDEA.png]
+如上图所示，我们将图例的位置由右上角改为了右下角。
+## 3.应用场景
+### 3.1 适用场景
+对比不同类别数据的数值大小，同时对比每一类别数据中，子类别的构成及大小。
+### 3.2 不适用场景
+1. 对于堆叠柱状图来说，很多色块不处于同一水平线上，因此难以比较。所以，如果需要清楚的比较数值，建议采用分组柱状图，让每一根柱子的高度都显而易见。
+2. 当堆叠的类型过多，很容易让人眼花缭乱。
+## 4.总结
+本节课我们讲了堆叠条形图的绘制以及堆叠条形图的适用场景和不适用场景。

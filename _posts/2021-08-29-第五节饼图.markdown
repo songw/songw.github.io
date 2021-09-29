@@ -1,0 +1,112 @@
+---
+layout: post
+title:  "第五节饼图"
+date:   2021-08-29 10:09:28 +0800
+categories: 数据可视化
+---
+上节课我们讲述了散点图的绘制，本节课我们来讲述饼图的绘制。
+
+## 1.什么是饼图？
+
+饼图，或称饼状图，是一个将圆形划分为几个扇形的统计图表。在饼图中，每个扇形的弧长大小，表示该种类占总体的比例，这些扇形合在一起刚好是一个完整的圆形。
+
+饼图最显著的功能在于表现”占比“。习惯上，人们也用饼图来比较扇形的大小，从而获得对数据的认知。但是，由于人类对“角度”的感知力并不如“长度”，在需要准确的表达数值（尤其是当数值接近、或数值很多）时，饼图常常不能胜任，建议用柱状图代替。
+
+使用时，须确认各个扇形的数据加起来等于 100%；避免扇区超过 5 个，尽量让图表简洁明了。
+## 2.饼图的绘制
+下面我们通过例子来看饼图的绘制：
+```python
+import matplotlib.pyplot as plt
+
+plt.style.use('fivethirtyeight')
+
+languages = ['JavaScript', 'HTML/CSS', 'SQL', 'Python', 'Java']
+popularity = [59219, 55466, 47544, 36443, 35917]
+
+plt.pie(popularity)
+
+plt.tight_layout()
+plt.show()
+```
+在上面的代码中，我们只要将一个列表传入到 pie 函数中，便可以绘制一个饼图。代码执行后得到的图形如下图所示：
+[image:88EE24E5-5B7A-4902-8BB9-AB26A8D118B7-689-000188ABE5DB1B5F/6D09BFD1-118A-4206-B8EF-B5D0D35BBCEF.png]
+从上面的饼图中我们不知道每个扇形所代表的数据，下面来为每个扇形打上标签。
+```python
+import matplotlib.pyplot as plt
+
+plt.style.use('fivethirtyeight')
+
+languages = ['JavaScript', 'HTML/CSS', 'SQL', 'Python', 'Java']
+popularity = [59219, 55466, 47544, 36443, 35917]
+
+plt.pie(popularity, labels=languages)
+
+plt.tight_layout()
+plt.show()
+```
+为了给每个扇形打上标签，我们只需要传入参数 labels 即可。代码执行后得到的图形如下图所示：
+[image:6012E5F2-1DF7-41E5-AC3E-695636429EF2-689-000188D2D992934D/C508037A-B7CA-4BCA-BA15-45689C1A4B20.png]
+除了给每个扇形打上标签之外，我们还可以把每个扇形的占比标在图形上，例如：
+```python
+import matplotlib.pyplot as plt
+
+plt.style.use('fivethirtyeight')
+
+languages = ['JavaScript', 'HTML/CSS', 'SQL', 'Python', 'Java']
+popularity = [59219, 55466, 47544, 36443, 35917]
+
+plt.pie(popularity, labels=languages, autopct='%1.1f%%')
+
+plt.tight_layout()
+plt.show()
+```
+上面的代码中，我们通过参数 autopct 为每个扇形标上占比。代码执行后得到的图形如下图所示：
+[image:3FEB8A7C-7658-4E96-ACED-1156134B93A7-689-0001892EF71D5ADD/3006EBE4-F1B0-4AE3-B06B-9AD0CA5D5177.png]
+上图中扇形从大到小排列的方向是逆时针的，一般情况下，我们比较习惯顺时针的方向，下面我们通过参数来设置成顺时针方向，例如：
+```python
+import matplotlib.pyplot as plt
+
+plt.style.use('fivethirtyeight')
+
+languages = ['JavaScript', 'HTML/CSS', 'SQL', 'Python', 'Java']
+popularity = [59219, 55466, 47544, 36443, 35917]
+
+plt.pie(popularity, labels=languages, autopct='%1.1f%%', counterclock=False, startangle=90)
+
+plt.title('top5 编程语言占比')
+plt.tight_layout()
+plt.show()
+```
+上面代码中，通过设置参数 counterclock 为 False，使得方向改为顺时针方向，通过设置参数 startangle 为 90，将最大扇形放在 12 点钟方向。代码执行后得到的图形如下图所示：
+[image:E7A3ED0E-BD4A-49FF-AF96-9844704516C6-689-000189623F58046E/2632674A-EF7D-44DC-87E7-4366C11B9EE1.png]
+有时候，为了强调某一个扇形，我们会让这个扇形脱离整个圆形。例如：
+```python
+import matplotlib.pyplot as plt
+
+plt.style.use('fivethirtyeight')
+
+languages = ['JavaScript', 'HTML/CSS', 'SQL', 'Python', 'Java']
+popularity = [59219, 55466, 47544, 36443, 35917]
+
+plt.pie(popularity, labels=languages, autopct='%1.1f%%', 
+        counterclock=False, startangle=90,explode=[0,0,0.1,0,0])
+
+plt.title('top5 编程语言占比')
+plt.tight_layout()
+plt.show()
+```
+在上面的代码中，我们通过设置参数 explode 来强调 SQL 这个扇形，要强调那个扇形，就把相应的值设置成非 0。代码执行后得到的图形如下图所示：
+[image:A1AC3D34-8D7F-45AC-B17F-83299B013D58-689-00018A035B0BF5DE/0E8FEB03-AC50-4703-8F65-A9346D974EF6.png]
+## 3.应用场景
+### 3.1 适用场景
++ 想要突出表示某个部分在整体中所占比例，尤其该部分所占比例达到总体的25%或50%时。
++ 分类数量最好小于5个。
++ 各不同分类间的占比差异明显。
++ 需要确定的图表绘制空间大小（不会随着分类增多有增大画布空间）。
+### 3.2 不适用场景
++ 如果变量之间相互独立，并不构成一个整体，那么不可以使用饼图。
++ 饼图不能用来表现趋势。
++ 由于饼图用面积取代了长度，从而加大了对各个数据进行比较的难度。因此，当需要对数据进行比较，分清孰大孰小，尤其是当数据接近时，条形图更加合适。
++ 当类别过多时，不建议使用饼图，否则阅读将会很差。
+## 4.总结
+本节课我们讲述了饼图的绘制以及饼图的适用场景和不适用场景。
