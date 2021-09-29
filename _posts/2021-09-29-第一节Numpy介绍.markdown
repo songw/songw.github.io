@@ -1,0 +1,148 @@
+---
+layout: post
+title:  "第一节Numpy介绍"
+date:   2020-08-28 16:09:28 +0800
+categories: jekyll update
+---
+## 1.多维数组介绍
+Numpy（Numerical Python 的简称），是 Python 数值计算最重要的基础包之一，大多数提供科学计算的包都以 Numpy 的 ndarray（多维数组）为构建基础。下面我们就通过一些实例来初步了解下 ndarray，要想使用 ndarray，需要导入 numpy 库。ndarray 的创建非常简单，只需要将列表传入到 array() 函数即可。例如：
+```python
+import numpy as np
+
+my_list = [0, 1, 2, 3, 4, 5, 6]
+my_arr = np.array(my_list)
+
+print(my_arr)
+```
+在上面的例子中，首先，导入 numpy 库；其次，创建一个列表并将列表传入到 array() 函数。这样便创建了一个 ndarray my_arr。
+ndarray 创建完成后，我们可以使用索引的方式对数组中的元素进行访问：
+```python
+import numpy as np
+
+my_list = [0, 1, 2, 3, 4, 5, 6]
+my_arr = np.array(my_list)
+
+print(my_arr[0])
+print(my_arr[-1])
+print(my_arr[2:4])
+```
+上面的例子中创建的是一维数组，二维数组的创建方式是一样的，例如：
+```python
+import numpy as np
+
+my_list = [[0, 1, 2], [3, 4, 5]]
+my_arr = np.array(my_list)
+
+print(my_arr[0][0])
+print(my_arr[1][2])
+```
+上面的代码中，向 array() 函数传入了一个二维列表，这样便得到了一个二维数组。同样的，我们可以通过索引的方式对数组内的元素进行访问。
+## 2.ndarray 的优势
+既然 ndarray 和列表这么相似，在已经有了列表的情况下为什么还需要ndarray 呢？下面我们就来看下，ndarray 相对于列表来说的优势：
+### 2.1 更少的存储空间
+我们通过例子来看下 ndarray 和列表占用存储空间的对比：
+#### 2.1.1 列表的存储空间
+```python
+import numpy as np
+import sys
+
+my_list1 = [1, 2, 3]
+
+size_of_list_object = sys.getsizeof(my_list1)
+size_of_elements = len(my_list1) * sys.getsizeof(my_list1[0])
+total_list_size = size_of_list_object + size_of_elements
+print("Size without the size of the elements: ", size_of_list_object)
+print("Size of all the elements: ", size_of_elements)
+print("Total size of list, including elements: ", total_list_size)
+
+my_list2 = [1, 2, 3, 4]
+size_of_list_object = sys.getsizeof(my_list2)
+size_of_elements = len(my_list2) * sys.getsizeof(my_list2[0])
+total_list_size = size_of_list_object + size_of_elements
+print("Size without the size of the elements: ", size_of_list_object)
+print("Size of all the elements: ", size_of_elements)
+print("Total size of list, including elements: ", total_list_size)
+
+my_list3 = []
+print(sys.getsizeof(my_list3))
+```
+从上述代码的输出，我们可以推断出，列表对象本身（不包含元素）的大小为 56 个字节，每增加一个元素，元素本身的大小为 28 个字节，指向元素的指针大小为 8 个字节。存储的结构如下图所示：
+[image:C01CAB09-5BCB-4C99-95E0-CC941E31F01B-3647-0000163B0231F475/B8351608-76E6-4733-AF28-838E72E2093B.png]
+#### 2.1.2 ndarray 的存储空间
+```python
+import numpy as np
+import sys
+
+my_arr1 = np.array([1, 2, 3])
+
+size_of_array_object = sys.getsizeof(my_arr1)
+size_of_elements = my_arr1.itemsize * my_arr1.size
+print("Size without the size of the elements: ", size_of_array_object)
+print("Size of all the elements: ", size_of_elements)
+
+my_arr2 = np.array([1, 2, 3, 4])
+size_of_array_object = sys.getsizeof(my_arr2)
+size_of_elements = my_arr2.itemsize * my_arr2.size
+print("Size without the size of the elements: ", size_of_array_object)
+print("Size of all the elements: ", size_of_elements)
+
+my_arr3 = np.array([])
+print(sys.getsizeof(my_arr3))
+```
+从上述代码的输出，我们可以推断出，ndarray 对象的大小包含了元素在内。不包含任何元素的 ndarray 对象的大小为 96 字节，每增加一个元素，增加 8 个字节。存储的结构如下图所示：
+[image:033DD91B-0E87-4B45-805A-DFEB69A4E2FD-3647-0000179B6024341B/B14E6B2D-CFE6-447C-8422-F18E901904E2.png]
+### 2.2 更快的处理速度
+在下面的例子中我们比较两个列表相乘和两个数组相乘的耗时，代码如下：
+```python
+import time
+import numpy as np
+
+size = 1000000
+my_list1 = range(size)
+my_list2 = range(size)
+
+my_arr1 = np.arange(size)
+my_arr2 = np.arange(size)
+
+begin_list_time = time.time()
+result_list = [(a * b) for a, b in zip(my_list1, my_list2)]
+end_list_time = time.time()
+list_cost_time = end_list_time - begin_list_time
+
+print("Time taken by Lists to perform multiplication:", list_cost_time, "seconds")
+
+begin_arr_time = time.time()
+result_arr = my_arr1 * my_arr2
+end_arr_time = time.time()
+arr_cost_time = end_arr_time - begin_arr_time
+print("Time taken by NumPy Arrays to perform multiplication:", arr_cost_time, "seconds")
+
+print("Numpy in this example is " + str(list_cost_time / arr_cost_time) + "faster!")
+```
+从输出结果可以看出，两个数组相乘的速度比两个列表相乘的速度快 20 倍左右。
+### 2.3 更方便的操作
+ndarray 支持元素方式的操作，在进行一些运算时往往会很方便，例如：
+```python
+import numpy as np
+
+my_list = [1, 2, 3]
+
+my_arr = np.array(my_list)
+
+try:
+    my_list = my_list + 4
+except(TypeError):
+    print("Lists don't support list + int")
+
+
+try:
+    my_arr = my_arr + 4
+    print("Modified Numpy array: ", my_arr)
+except(TypeError):
+    print("Numpy arrays don't support list + int")
+```
+从上面例子的输出可以看出，如果想对列表中的每个元素加 4，列表不支持 
+`my_list = my_list + 4` 操作，而 ndarray 是支持 `my_arr = my_arr + 4` 操作的。所以，进行一些运算会非常方便。
+## 3.总结
+[image:75F9F713-0CC7-45BC-BDFD-4DD99445F965-3647-00001A36ADD13D67/A4140B43-8D54-4CB0-B383-87C762104A5E.png]
+
