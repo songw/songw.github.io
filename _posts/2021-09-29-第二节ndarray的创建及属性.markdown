@@ -1,0 +1,222 @@
+---
+layout: post
+title:  "第二节ndarray的创建及属性"
+date:   2021-09-29 09:09:28 +0800
+categories: jekyll update
+---
+上节课我们介绍了 numpy 的多维数组以及多维数组相对于列表的优势。
+[image:CF07B654-1EBA-4BDE-A8F7-32D207E0E96E-3647-00001DE45DAC8185/A4140B43-8D54-4CB0-B383-87C762104A5E.png]
+## 1.ndarray 的创建及获取属性
+上节课我们有提到过 ndarray 的创建，我只需要将列表传入到 np.array() 函数中。例如：
+```python
+import numpy as np
+
+my_list = [1, 2, 3, 4, 5, 6]
+my_arr = np.array(my_list)
+print(my_arr)
+```
+ndarray 创建完成后，我们可以查看 ndarray 的属性。
+### 1.1 查看类型
+#### 1.1.1 查看 ndarray 的类型。
+```python
+import numpy as np
+
+my_list = [1, 2, 3, 4, 5, 6]
+my_arr = np.array(my_list)
+print(type(my_arr))
+```
+由于类型为 ndarray，所以代码中得到的类型为 `<class 'numpy.ndarray'>`
+#### 1.1.2 查看 ndarray 中元素的类型
+```python
+import numpy as np
+
+my_list = [1, 2, 3, 4, 5, 6]
+my_arr = np.array(my_list)
+print(my_arr.dtype)
+```
+由于 ndarray 中的元素为整型，所以代码中得到的元素类型为`int64`。
+### 1.2 查看维度信息
+#### 1.2.1 查看维度数
+```python
+import numpy as np
+
+my_list = [1, 2, 3, 4, 5, 6]
+my_arr = np.array(my_list)
+print(my_arr.ndim)
+```
+由于我们创建的是一维数组，所以代码中得到的维度数为 1。
+#### 1.2.2 查看数组大小
+```python
+import numpy as np
+
+my_list = [1, 2, 3, 4, 5, 6]
+my_arr = np.array(my_list)
+print(my_arr.size)
+```
+由于数组中包含 6 个元素，所以代码中得到的数组大小为 6。
+#### 1.2.3 查看各维度大小
+```python
+import numpy as np
+
+my_list = [1, 2, 3, 4, 5, 6]
+my_arr = np.array(my_list)
+print(my_arr.shape)
+```
+由于我们创建的是一维数组，所以代码中得到的结果为 `(6,)`。
+### 1.3 查看元素信息
+#### 1.3.1 查看元素占用的存储空间
+```python
+import numpy as np
+
+my_list = [1, 2, 3, 4, 5, 6]
+my_arr = np.array(my_list)
+print(my_arr.itemsize)
+```
+由于元素的类型为 `int64`，所以占用的存储空间为 8 个字节。
+上面讲的是一维数组的创建及数组属性的获取，下面来讲下二维数组。创建方法以及属性的获取都和一维数组一样，所以就不一一详细介绍了，只是把代码列出，同学们可以运行代码感受下。
+```python
+import numpy as np
+
+my_list = [[1.1, 2.2, 3.3], [4.4, 5.5, 6.6]]
+my_arr = np.array(my_list)
+print(type(my_arr))
+```
+
+```python
+import numpy as np
+
+my_list = [[1.1, 2.2, 3.3], [4.4, 5.5, 6.6]]
+my_arr = np.array(my_list)
+print(my_arr.dtype)
+```
+
+```python
+import numpy as np
+
+my_list = [[1.1, 2.2, 3.3], [4.4, 5.5, 6.6]]
+my_arr = np.array(my_list)
+print(my_arr.ndim)
+```
+
+```python
+import numpy as np
+
+my_list = [[1.1, 2.2, 3.3], [4.4, 5.5, 6.6]]
+my_arr = np.array(my_list)
+print(my_arr.size)
+```
+
+```python
+import numpy as np
+
+my_list = [[1.1, 2.2, 3.3], [4.4, 5.5, 6.6]]
+my_arr = np.array(my_list)
+print(my_arr.shape)
+```
+
+```python
+import numpy as np
+
+my_list = [[1.1, 2.2, 3.3], [4.4, 5.5, 6.6]]
+my_arr = np.array(my_list)
+print(my_arr.itemsize)
+```
+
+在创建数组时，我们还可以明确指定元素的类型，例如：
+```python
+import numpy as np
+
+my_list = [[1, 2, 3], [4, 5, 6]]
+my_arr = np.array(my_list, dtype = 'float64')
+print(my_arr.dtype)
+```
+在上面的例子中，当我们明确指定元素类型时，虽然元素的类型为整型，但是由于明确指定了浮点型，所以得到的元素类型为浮点型。
+## 2.使用函数创建 ndarray
+前面创建 ndarray 的方法是将列表传入到函数 array() 中。除此之外，我们还可以使用函数来创建 ndarray。
+### 2.1 arange 函数
+```python
+import numpy as np
+
+my_arr = np.arange(0, 12)
+print(my_arr)
+```
+上面的代码创建了一个包含 12 个元素的 ndarray，元素从 0 开始，到 11 结束，`[ 0  1  2  3  4  5  6  7  8  9 10 11]`。在使用 arange() 函数，当我们不指定步长时，默认的步长为 1。当然，我们亦可以明确指定步长。例如：
+```python
+import numpy as np
+
+my_arr = np.arange(0, 12, 3)
+print(my_arr)
+```
+当我们指定步长为 3 时，生成的 ndarray 为 `[0 3 6 9]`。arange() 函数的参数不但可以为整数，还可以为小数。例如：
+```python
+import numpy as np
+
+my_arr = np.arange(0, 6, 0.6)
+print(my_arr)
+```
+上面的代码生成了数组 `[0.  0.6 1.2 1.8 2.4 3.  3.6 4.2 4.8 5.4]`。
+上面使用 arange() 函数生成的是一维数组，我们可以在生成一维数组后对其进行重塑，这样便可以得到多维数组。例如：
+```python
+import numpy as np
+
+my_arr = np.arange(0, 12).reshape(3, 4)
+print(my_arr)
+```
+在上面的代码中，调用 reshape() 函数对生成的一维数组进行重塑，便得到一个 3 行 4 列的二维数组。
+### 2.2 linspace 函数
+```python
+import numpy as np
+
+my_arr = np.linspace(0, 10, 5)
+print(my_arr)
+```
+上述代码对区间 [0, 10] 进行 5 等分，取每个分界点的数字组成数组，便得到一维数组 `[ 0.   2.5  5.   7.5 10. ]`。
+### 2.3 zeros 函数
+```python
+import numpy as np
+
+my_arr = np.zeros(6)
+print(my_arr)
+```
+上述代码生成一个 6 个 0 的一维数组 `[0. 0. 0. 0. 0. 0.]`。
+```python
+import numpy as np
+
+my_arr = np.zeros((2, 3))
+print(my_arr)
+```
+上述代码生成一个 2 行 3 列的二维数组，`[[0. 0. 0.][0. 0. 0.]]`，数组的元素全为 0。在调用 zeros() 函数生成多维数组时，要注意传入的是一个元组，元组的各个元素指明了多维数组各个维度的大小。
+### 2.4 ones 函数
+ones() 函数和 zeros() 函数类似，只不过生成的数组中的元素全为 1。
+```python
+import numpy as np
+
+my_arr = np.ones(6)
+print(my_arr)
+```
+上述代码生成一个 6 个 1 的一维数组 `[1. 1. 1. 1. 1. 1.]`。
+```python
+import numpy as np
+
+my_arr = np.ones((2, 3))
+print(my_arr)
+```
+上述代码生成一个 2 行 3 列的二维数组，`[[1. 1. 1.][1. 1. 1.]]`，数组的元素全为 1。
+### 2.5 random() 函数
+我们可以使用 random() 函数来生成元素大小为随机的 ndarray。
+```python
+import numpy as np
+
+my_arr = np.random.random(3)
+print(my_arr)
+```
+上面代码生成一个元素大小随机的一维数组 `[0.56733043 0.49110822 0.87588511]`。使用 random() 函数同样可以生成二维数组。
+```python
+import numpy as np
+
+my_arr = np.random.random((2, 3))
+print(my_arr)
+```
+## 3.总结
+[image:547CE92B-0706-4E9B-A00E-A40FDAC6E68D-3647-000022CFAFE9C80C/805E0CF1-3AB5-41F6-B4E1-7149AEE7D6AE.png]
+

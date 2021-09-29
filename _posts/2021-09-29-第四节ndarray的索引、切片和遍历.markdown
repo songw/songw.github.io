@@ -1,0 +1,173 @@
+---
+layout: post
+title:  "第四节ndarray的索引、切片和遍历"
+date:   2021-09-29 11:09:28 +0800
+categories: jekyll update
+---
+上节课我们讲述了 ndarray 的基本操作。
+[image:E8372372-C562-4994-ADCA-E24D5D92EF74-3647-0000381080EFEA05/0A5040F6-8A3C-4D4C-994D-F3FB10B1FE02.png]
+本节课我们来讲述 ndarray 的索引、切片和遍历。
+## 1.索引
+### 1.1 一维数组的索引
+ndarray 的索引和列表的索引类似。下面我们通过例子来看：
+```python
+import numpy as np
+
+my_arr = np.arange(1, 10)
+
+print(my_arr[0])
+print(my_arr[1])
+print(my_arr[-1])
+print(my_arr[-3])
+```
+和列表一样，ndarray 不但支持正数索引，而且支持负数索引。和列表不同的是，ndarray 支持一次索引多个元素。例如：
+```python
+import numpy as np
+
+my_arr = np.arange(1, 10)
+
+print([[0, 1, 5, 8]])
+```
+### 1.2 二维数组的索引
+上面讲述的是一维数组的索引，下面来看下二维数组的索引。
+```python
+import numpy as np
+
+my_arr = np.arange(1, 10).reshape(3,3)
+
+print(my_arr[0, 1])
+print(my_arr[1, 2])
+```
+在对二维数组进行索引时，需要传入行和列，这里有点要注意的是，行和列的索引都是从 0 开始的。`my_arr[0, 1]` 访问的是第一行第二列的元素，`my_arr[1, 2]` 访问的是第二行第三列的元素。和一维数组的索引一样，我们也可以一次索引多个元素。例如：
+```python
+import numpy as np
+
+my_arr = np.arange(1, 10).reshape(3,3)
+
+print(my_arr[0, [1, 2]])
+print(my_arr[[0,1], 2])
+```
+### 1.3 布尔索引
+ndarray 除了支持上面的索引之外，还支持布尔索引。我们来看一个例子：
+```python
+import numpy as np
+
+my_arr = np.random.random(9)
+print(my_arr < 0.5)
+```
+上面的代码会生成一个布尔型的 ndarray，我们可以使用这个布尔型的 ndarray 对原 ndarray 进行索引。例如：
+```python
+import numpy as np
+
+my_arr = np.random.random(9)
+print(my_arr[my_arr < 0.5])
+```
+这样便会筛选出所有小于 0.5 的元素。上面 ndarray 中元素的类型为 float64，元素类型为字符串的 ndarray 同样可以使用布尔索引。例如：
+```python
+import numpy as np
+
+names = np.array(['Bob','Joe','Will','Bob'])
+print(names[names == 'Bob'])
+```
+上面的代码输出 ndarray 中所有为 Bob 的元素。布尔型索引不仅适用于一维数组，而且适用于多维数组，下面以二维数组为例来说明：
+```python
+import numpy as np
+
+my_arr = np.random.random((4, 4))
+print(my_arr[my_arr < 0.5])
+```
+上面的代码会输出二维数组中所有小于 0.5 的元素，在这个例子中，我们使用二维的布尔型数组对二维数组进行过滤。我们还可以使用一维的布尔型数组对二维数组进行过滤。例如：
+```python
+import numpy as np
+
+my_arr = np.random.random((4, 4))
+names = np.array(['Bob','Joe','Will','Bob'])
+
+print(my_arr[names == 'Bob'])
+```
+在使用一维布尔型数组对二维数组进行索引时，会把二维数组当成一个一维数组，一维数组的每个元素又是一个一维数组。所以上面的代码得到的是一个 2 行 4 列的二维数组。
+## 2.切片
+和列表类似，ndarray 同样支持切片操作，我们先来看一维数组。
+```python
+import numpy as np
+
+my_arr = np.arange(9)
+print(my_arr[1:5])
+print(my_arr[:])
+print(my_arr[1:8:2])
+print(my_arr[::2])
+print(my_arr[:5:2])
+print(my_arr[:8:])
+print(my_arr[::-1])
+```
+同样的，我们可以对二维数组进行切片。例如：
+```python
+import numpy as np
+
+my_arr = np.arange(9).reshape((3,3))
+print(my_arr[:])
+print(my_arr[0, :])
+print(my_arr[:, 0])
+print(my_arr[:2, :1])
+print(my_arr[0:2, 0:2])
+print(my_arr[[0, 2], :])
+print(my_arr[::-1])
+```
+针对上述代码，大家要对照每行代码的输出弄明白为什么会输出上述结果。为了方便大家的理解，使用更加形象化的图形方式来做个说明：
+[image:DDF4C4C7-C1CA-438A-AED5-E3141DC789E4-3647-00004193334E3C5A/3436B341-7B9E-477F-BC15-AD3AD447A089.png]
+## 3.遍历
+除了索引和切片之外，我们还可以对 ndarray 进行遍历操作。我们通过实例来看下 ndarray 的遍历。
+```python
+import numpy as np
+
+my_arr = np.arange(9)
+for i in my_arr:
+    print(i)
+```
+上面代码使用 for 循环对 ndarray 进行遍历，输出了 ndarray 中的所有元素。同样的，可以对二维数组进行遍历，例如：
+```python
+import numpy as np
+
+my_arr = np.arange(9).reshape((3,3))
+for r in my_arr:
+    print(r)
+```
+上述代码会把每行元素组成的一维数组作为一个二维数组的元素进行遍历。输出了三个一维数组。我们还可以使用一个二重循环来遍历二维数组中的每一个元素，例如：
+```python
+import numpy as np
+
+my_arr = np.arange(9).reshape((3,3))
+for r in my_arr:
+    for c in r:
+        print(c)
+```
+上述代码便遍历了二维数组中的每一个元素。除了使用二重循环外，我们还可以首先将二维数组进行平铺，然后使用一重循环进行遍历，例如：
+```python
+import numpy as np
+
+my_arr = np.arange(9).reshape((3,3))
+for i in my_arr.flatten():
+    print(i)
+```
+除了对二维数组进行平铺外，我们还可以使用 np.nditer() 函数，在使用 np.nditer() 时，可以指定行优先或者列优先，例如，首先来看行优先：
+```python
+import numpy as np
+
+my_arr = np.arange(9).reshape((3,3))
+
+# 行优先
+for i in np.nditer(my_arr, order='C'):
+    print(i)
+```
+列优先：
+```python
+import numpy as np
+
+my_arr = np.arange(9).reshape((3,3))
+
+# 列优先
+for i in np.nditer(my_arr, order='F'):
+    print(i)
+```
+## 4.总结
+[image:91D25E7C-3189-4C73-8F25-97AC6B4E4272-3647-000042D243F07A9E/D1A0BA25-5967-417E-989B-C0A79B3E09FE.png]

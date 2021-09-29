@@ -1,0 +1,118 @@
+---
+layout: post
+title:  "第七节ndarray的赋值、视图、拷贝和广播"
+date:   2021-09-29 14:09:28 +0800
+categories: jekyll update
+---
+上节课我们讲述了用于 ndarray 的文件操作。
+[image:291F7A52-C01E-484D-A9EE-A2026AE90D5F-3647-000065423B3E78D3/B905CD50-8BCC-4B21-9419-FB8635E79F03.png]
+本节课我们来讲述 ndarray 的赋值、视图、拷贝和广播。
+## 1.赋值
+```python
+import numpy as np
+
+my_arr1 = np.arange(6)
+my_arr2 = my_arr1
+
+print(my_arr2 is my_arr1)
+```
+在上面的代码中，将 `my_arr1` 赋值给 `my_arr2`，这时不会创建新的数组对象，只是多了一个引用，`my_arr1` 和 `my_arr2` 是同一个数组的两个名字。当我们改变 `my_arr1` 的形状时，`my_arr2` 的形状也会跟着改变，例如：
+```python
+import numpy as np
+
+my_arr1 = np.arange(6)
+my_arr2 = my_arr1
+
+my_arr2.shape = (2, 3)
+
+print(my_arr2)
+print(my_arr1)
+```
+上面的代码中，`my_arr2` 的形状改变后，`my_arr2` 的形状也发生了相应的改变。
+## 2.视图
+视图方法可以实现不同的数组对象共享同样的数据。例如：
+```python
+import numpy as np
+
+my_arr1 = np.arange(6)
+my_arr2 = my_arr1.view()
+
+print(my_arr2 is my_arr1)
+print(my_arr2.base is my_arr1)
+print(my_arr2.flags.owndata)
+```
+从上述代码的输出可以看出，`my_arr1` 和 `my_arr2` 是两个不同的对象，`my_arr2` 是 `my_arr1` 的视图，`my_arr2` 没有自己的数据。当 `my_arr2` 的形状发生改变时，`my_arr1` 的形状并不会发生改变。但是，当 `my_arr2` 的数据发生改变时，`my_arr1` 会发生同样的改变。例如：
+```python
+import numpy as np
+
+my_arr1 = np.arange(6)
+my_arr2 = my_arr1.view()
+
+my_arr2.shape = (2, 3)
+
+print(my_arr1.shape)
+print(my_arr2.shape)
+
+my_arr2[0, 1] = 10
+print(my_arr1)
+```
+综上所述，我们可以得出视图相对于原来的数组来说，除了数据是共享的，其他都是独立的。另外，前面介绍的切片操作，得到的也是一个数组的视图。例如：
+```python
+import numpy as np
+
+my_arr1 = np.arange(6)
+my_slice = my_arr1[2:4]
+my_slice[:] = 10
+
+print(my_arr1)
+```
+从上面的代码可以得出，当改变切片的数据时，原数组的数据也跟着进行了相应的改变。
+## 3.拷贝
+从上述内容可以看出，不管是赋值还是视图，对其中一个数组的改变都会影响另外一个。那么有没有一种方法使得两者会不干扰，答案是有的，那便是拷贝。copy() 方法会生成数组的一个完整的拷贝，包括其数据。例如：
+```python
+import numpy as np
+
+my_arr1 = np.arange(6)
+my_arr2 = my_arr1.copy()
+
+print(my_arr2 is my_arr1)
+print(my_arr2.base is my_arr1)
+```
+从上述代码的输出可以看出，`my_arr1` 和 `my_arr2` 是两个独立的数组。对其中一个数组中元素的改变不会影响另外一个数组：
+```python
+import numpy as np
+
+my_arr1 = np.arange(6)
+my_arr2 = my_arr1.copy()
+
+my_arr2[2] = 10
+
+print(my_arr1)
+print(my_arr2)
+```
+## 4.广播
+广播(broadcasting)指的是不同形状的数组之间的算术运算的执行方式。它是一种非常强大的功能，但也容易令人误解，将标量值跟数组合并时就会发生最简单的广播，例如：
+```python
+import numpy as np
+
+my_arr1 = np.arange(6)
+my_arr2 = my_arr1 * 6
+
+print(my_arr2)
+```
+这里我们说，在这个乘法运算中，标量值 6 被广播到了其他所有的元素上。下面继续来看一个例子，我们可以通过减去列平均值的方式对数组的每一列进行距平化处理。这个问题解决起来非常简单，代码如下：
+```python
+import numpy as np
+
+my_arr1 = np.random.randn(4, 3)
+demeaned = my_arr1 - my_arr1.mean(0)
+
+print(demeaned)
+
+print(demeaned.mean(0))
+```
+在上面的例子中，`my_arr1.mean(0)` 是一个 1 行 3 列的数组，当我们用一个 4 行 3 列的数组减去一个 1 行 3 列的数组时，便会对 1 行 3 列的数组进行广播。广播过程的图形化如下图所示：
+[image:5178F770-3BCB-4E6F-A018-68BAEBF9CF30-3647-00006F71F3619B49/DE61446B-336C-41B5-A7E2-273D7D020163.png]
+
+## 5.总结
+[image:AFB75325-FDE2-448D-AD1B-892F879D7742-3647-00006F8F8401C548/633CE1D2-14FC-4C21-8BEC-C435C9B7493F.png]

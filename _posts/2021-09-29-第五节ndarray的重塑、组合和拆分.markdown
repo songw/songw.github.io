@@ -1,0 +1,148 @@
+---
+layout: post
+title:  "第五节ndarray的重塑、组合和拆分"
+date:   2021-09-29 12:09:28 +0800
+categories: jekyll update
+---
+上节课我们讲述了 ndarray 的索引、切片和遍历。
+[image:703CAE53-B747-46D7-9B4C-7CA4322AD53A-3647-000042DBAB6CE0E9/D1A0BA25-5967-417E-989B-C0A79B3E09FE.png]
+本节课我们来讲述 ndarray 的重塑、组合和拆分。
+## 1.重塑
+使用 numpy 提供的方法，我们可以改变 ndarray 的维度数，比如将一维的数组重塑成二维的数组，例如：
+```python
+import numpy as np
+
+my_arr1 = np.random.random(12)
+print(my_arr1)
+
+my_arr2 = my_arr1.reshape(3,4)
+print(my_arr2)
+
+print(my_arr1)
+```
+在上面的代码中，`my_arr1` 是一个含有 12 个元素的一维数组，我们使用 `reshape()` 函数将 `my_arr1` 重塑成一个 3 行 4 列的二维数组。这里有一点要注意的是，虽然我们对 `my_arr1` 调用了 reshape() 函数，但是 `my_arr1` 本身并没有发生改变，要想改变 `my_arr1`，我们可以这样做：
+```python
+import numpy as np
+
+my_arr1 = np.random.random(12)
+print(my_arr1)
+
+my_arr1.shape = (3, 4)
+print(my_arr1)
+```
+在上面的代码中，我们直接将 `my_arr1` 的 shape 属性修改为 (3, 4)，这样的话，`my_arr1` 的形状就发生了改变。如果想把发生形状改变后的 `my_arr1` 重新改成一维数组，我们可以使用 ravel() 函数。
+```python
+import numpy as np
+
+my_arr1 = np.random.random(12)
+print(my_arr1)
+
+my_arr1.shape = (3, 4)
+print(my_arr1)
+
+my_arr1 = my_arr1.ravel()
+print(my_arr1)
+```
+## 2.组合
+上面讲述了 ndarray 的重塑，下面来讲下多个 ndarray 的组合。例如：
+```python
+import numpy as np
+
+my_arr1 = np.ones((3,3))
+my_arr2 = np.zeros((4,3))
+
+print(np.vstack((my_arr1, my_arr2)))
+```
+上面的代码将 `my_arr1` 和 `my_arr2` 按照垂直方向进行组合，在组合时需要注意的是，当我们按垂直方向组合两个 ndarray 时，两个 ndarray 的列数需要相等，否则会报错。既然可以按照垂直方向进行组合，相应地，我们也可以按照水平方向进行组合。例如：
+```python
+import numpy as np
+
+my_arr1 = np.ones((3,3))
+my_arr2 = np.zeros((3,4))
+
+print(np.hstack((my_arr1, my_arr2)))
+```
+上面的代码将 `my_arr1` 和 `my_arr2` 按照水平方向进行组合，在组合时需要注意的是，当我们按水平方向组合两个 ndarray 时，两个 ndarray 的行数需要相等，否则会报错。
+上面按垂直方向组合两个 ndarray 时，我们还有另外一种实现方法，例如：
+```python
+import numpy as np
+
+my_arr1 = np.ones((3,3))
+my_arr2 = np.zeros((4,3))
+
+print(np.row_stack((my_arr1, my_arr2)))
+```
+上面代码中的 row_stack() 函数的效果和 vstack() 函数的效果是一样的，在进行组合时，同样要注意两个 ndarray 的列数需要相等，否则会报错。同样的，上面按水平方向组合两个 ndarray 时，我们同样有另外一种实现方法，例如：
+```python
+import numpy as np
+
+my_arr1 = np.ones((3,3))
+my_arr2 = np.zeros((3,4))
+
+print(np.column_stack((my_arr1, my_arr2)))
+```
+上面代码中的 column_stack() 函数的效果和 hstack() 函数的效果是一样的，在进行组合时，同样要注意两个 ndarray 的行数需要相等，否则会报错。上面讲的都是二维数组的组合，一维数组的组合是类似的，我们来举两个例子：
+```python
+import numpy as np
+
+my_arr1 = np.arange(0, 3)
+my_arr2 = np.arange(3, 6)
+my_arr3 = np.arange(6, 9)
+
+print(np.row_stack((my_arr1, my_arr2, my_arr3)))
+```
+```python
+import numpy as np
+
+my_arr1 = np.arange(0, 3)
+my_arr2 = np.arange(3, 6)
+my_arr3 = np.arange(6, 9)
+
+print(np.column_stack((my_arr1, my_arr2, my_arr3)))
+```
+## 3.拆分
+既然可以对 ndarray 进行组合，我们就可以对 ndarray 进行拆分。例如：
+```python
+import numpy as np
+
+my_arr1 = np.arange(0, 16).reshape((4, 4))
+[my_arr2, my_arr3] = np.hsplit(my_arr1, 2)
+
+print(my_arr2)
+print(my_arr3)
+```
+上面的代码对 `my_arr1` 进行拆分，拆分成 2 个 ndarray，`my_arr1` 是一个 4 行 4 列的二维数组，拆分成了 2 个 4 行 2 列 的二维数组。hsplit() 函数进行的是水平方向的拆分，同样的，我们可以进行垂直方向的拆分，例如：
+```python
+import numpy as np
+
+my_arr1 = np.arange(0, 16).reshape((4, 4))
+[my_arr2, my_arr3] = np.vsplit(my_arr1, 2)
+
+print(my_arr2)
+print(my_arr3)
+```
+上面的代码进行了水平方向的拆分，将 4 行 4 列的二维数组 `my_arr1` 拆分成 2 个 2 行 4 列的二维数组。上面进行的拆分是平分，更进一步我们可以指定拆分的位置。例如：
+```python
+import numpy as np
+
+my_arr1 = np.arange(0, 16).reshape((4, 4))
+[my_arr2, my_arr3, my_arr4] = np.split(my_arr1, [1, 3], axis=1)
+
+print(my_arr2)
+print(my_arr3)
+print(my_arr4)
+```
+上面代码指定的拆分位置为第 1 列和第 3 列，于是将一个 4 行 4 列的二维数组拆分成 3 个数组，分别是 4 行 1 列、4 行 2 列、4 行 1列。上面指定的是列的拆分位置，同样的，我们可以指定行的拆分位置，例如：
+```python
+import numpy as np
+
+my_arr1 = np.arange(0, 16).reshape((4, 4))
+[my_arr2, my_arr3, my_arr4] = np.split(my_arr1, [1, 3], axis=0)
+
+print(my_arr2)
+print(my_arr3)
+print(my_arr4)
+```
+上面代码指定的拆分位置为第 1 行和第 3 行，于是将一个 4 行 4 列的二维数组拆分成 3 个数组，分别是 1 行 4 列、2 行 4 列、1 行 4 列。
+## 4.总结
+[image:35825F5B-8E42-4FB9-9A80-1A2F413F5C07-3647-00004E616C32855C/1E9CD5A4-AA9B-4CCB-BBDA-82FE75789358.png]
