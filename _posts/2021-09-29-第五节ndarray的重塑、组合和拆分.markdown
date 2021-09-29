@@ -5,7 +5,7 @@ date:   2021-09-29 12:09:28 +0800
 categories: jekyll update
 ---
 上节课我们讲述了 ndarray 的索引、切片和遍历。
-[image:703CAE53-B747-46D7-9B4C-7CA4322AD53A-3647-000042DBAB6CE0E9/D1A0BA25-5967-417E-989B-C0A79B3E09FE.png]
+![image](https://user-images.githubusercontent.com/1639828/135187529-a865062b-9b81-421c-8bae-2edb73938490.png)
 本节课我们来讲述 ndarray 的重塑、组合和拆分。
 ## 1.重塑
 使用 numpy 提供的方法，我们可以改变 ndarray 的维度数，比如将一维的数组重塑成二维的数组，例如：
@@ -145,4 +145,4 @@ print(my_arr4)
 ```
 上面代码指定的拆分位置为第 1 行和第 3 行，于是将一个 4 行 4 列的二维数组拆分成 3 个数组，分别是 1 行 4 列、2 行 4 列、1 行 4 列。
 ## 4.总结
-[image:35825F5B-8E42-4FB9-9A80-1A2F413F5C07-3647-00004E616C32855C/1E9CD5A4-AA9B-4CCB-BBDA-82FE75789358.png]
+![image](https://user-images.githubusercontent.com/1639828/135187591-09c3dc17-74b4-47ba-bc82-82525cbb5b86.png)
