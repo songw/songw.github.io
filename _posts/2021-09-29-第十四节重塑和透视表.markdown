@@ -1,0 +1,284 @@
+---
+layout: post
+title:  "第十四节重塑和透视表"
+date:   2021-09-29 18:09:28 +0800
+categories: jekyll update
+---
+上节课我们讲述了数据的分组及计算。
+
+[image:981A0004-D373-409C-B9CB-D2C5EE13168E-3895-000044FF6DC2C8B8/7A721AAE-A715-4F2C-A11C-4A4B71ABCEC7.png]
+
+本节课我们来讲述数据的重塑和透视表。
+## 1.重塑层次化索引
+层次化索引为 DataFrame 数据的重塑提供了一种具有良好一致性的方式。主要功能有二：
++ stack：将数据的列“旋转”为行。
++ unstack：将数据的行“旋转”为列。
+```python
+import numpy as np
+import pandas as pd
+
+
+df = pd.DataFrame(np.array([[16.0, 23.2, 12.1],
+                             [16.8, 24.6, 14.0],
+                             [14.7, 23.8, 16.6]]), 
+                    index=pd.Index(['10/1/2020', '10/2/2020', '10/3/2020'], name='day'), 
+                    columns=pd.Index(['Beijing', 'Shanghai', 'Berlin'], name='temp'))
+
+
+print(df)
+
+stack_df = df.stack()
+print(stack_df)
+
+unstack_df = stack_df.unstack()
+print(unstack_df)
+```
+上面代码中，对 DataFrame 对象 df 调用 `stack()` 方法，将 df 的列索引 temp 旋转为行索引，得到 `stack_df`。对 `stack_df` 应用 `unstack()` 方法，将 `stack_df` 的行索引 temp 旋转为列索引，得到 `unstack_df`，`unstack_df ` 和 `df` 是相等的。
+
+在对 `stack_df` 应用 `unstack()` 方法时，默认是将最内层的行索引 temp 转换为列索引。我们也可以通过参数来设置对哪个行索引进行转换。例如：
+```python
+import numpy as np
+import pandas as pd
+
+
+df = pd.DataFrame(np.array([[16.0, 23.2, 12.1],
+                             [16.8, 24.6, 14.0],
+                             [14.7, 23.8, 16.6]]), 
+                    index=pd.Index(['10/1/2020', '10/2/2020', '10/3/2020'], name='day'), 
+                    columns=pd.Index(['Beijing', 'Shanghai', 'Berlin'], name='temp'))
+
+
+print(df)
+
+stack_df = df.stack()
+print(stack_df)
+
+unstack_df = stack_df.unstack(0)
+print(unstack_df)
+```
+上面代码中，在对 `stack_df ` 应用 `unstack()` 方法时，指定了参数 0，这时候将行索引 `day` 转换成列索引。我们还可以通过指定行索引的名称来确定将哪个行索引转换成列索引。例如：
+```python
+import numpy as np
+import pandas as pd
+
+
+df = pd.DataFrame(np.array([[16.0, 23.2, 12.1],
+                             [16.8, 24.6, 14.0],
+                             [14.7, 23.8, 16.6]]), 
+                    index=pd.Index(['10/1/2020', '10/2/2020', '10/3/2020'], name='day'), 
+                    columns=pd.Index(['Beijing', 'Shanghai', 'Berlin'], name='temp'))
+
+
+print(df)
+
+stack_df = df.stack()
+print(stack_df)
+
+unstack_df = stack_df.unstack('day')
+print(unstack_df)
+```
+上面代码中，在调用 `unstack()` 函数时，指定了参数 `day`，于是将 `stack_df` 的行索引 `day` 转换成了 列索引。 另外有一点要注意的是，在 unstack 的过程中，有可能会产生缺失值。例如：
+```python
+import numpy as np
+import pandas as pd
+
+
+s1 = pd.Series([16.0, 23.2], index=['Beijing', 'Shanghai'])
+s2 = pd.Series([24.6, 14.0], index=['Shanghai', 'Berlin'])
+df = pd.concat([s1, s2], keys=['10/1/2020', '10/2/2020'])
+
+print(df)
+print(df.unstack())
+```
+由于 `Beijing` 在 10/2/2020 这一天以及 `Berlin` 在 `10/1/2020` 这一天没有值，所以在 unstack 之后，这两处的值为 NaN。由于 stack 默认是过滤 NaN 值的，所以在 stack 的过程中，NaN 会被过滤掉。例如：
+```python
+import numpy as np
+import pandas as pd
+
+
+s1 = pd.Series([16.0, 23.2], index=['Beijing', 'Shanghai'])
+s2 = pd.Series([24.6, 14.0], index=['Shanghai', 'Berlin'])
+df = pd.concat([s1, s2], keys=['10/1/2020', '10/2/2020'])
+
+print(df)
+
+unstack_df = df.unstack()
+print(unstack_df)
+
+stack_df = unstack_df.stack()
+print(stack_df)
+```
+从上面的代码，可以看出，在对 `unstack_df` 进行 stack 的过程中，`unstack_df ` 中的 NaN 值被过滤掉了。我们也可以设置不进行 NaN 值的过滤。例如：
+```python
+import numpy as np
+import pandas as pd
+
+
+s1 = pd.Series([16.0, 23.2], index=['Beijing', 'Shanghai'])
+s2 = pd.Series([24.6, 14.0], index=['Shanghai', 'Berlin'])
+df = pd.concat([s1, s2], keys=['10/1/2020', '10/2/2020'])
+
+print(df)
+
+unstack_df = df.unstack()
+print(unstack_df)
+
+stack_df = unstack_df.stack(dropna=False)
+print(stack_df)
+```
+通过设置 `dropna=False`，在 stack 的过程中，没有过滤 NaN 值。
+## 2.透视表
+数据透视表是 `Excel` 的重要功能，它是汇总、分析、浏览和呈现汇总数据的好方法。在 `pandas` 中它被称作 `pivot_table`，下面我们就来看下 `pandas` 中 `pivot_table` 的强大功能。
+
+### 2.1 最简单的透视表
+最简单的透视表必须有 `index`，在下面的例子中，使用 `City` 作为索引。例如：
+```python
+import numpy as np
+import pandas as pd
+
+
+df = pd.DataFrame({'Date time': ['2020-10-01', '2020-10-01', '2020-10-02', '2020-10-02', '2020-10-01', '2020-10-01', '2020-10-02', '2020-10-02'],
+                   'AM/PM': ['AM', 'PM', 'AM', 'PM', 'AM', 'PM', 'AM', 'PM'],
+                   'City': ['Beijing', 'Beijing', 'Beijing', 'Beijing', 'Shanghai', 'Shanghai', 'Shanghai', 'Shanghai'],
+                   'Temperature': [14.0, 18.0, 14.6, 19, 20, 26.4, 21, 28.2],
+                   'Wind Speed': [11.2, 13.2, 15.9, 18.1, 9.7, 10.1, 11.4, 11]})
+
+
+print(df)
+print(df.pivot_table(index=['City']))
+```
+上面的例子中，当把 `City` 设置成 `index` 时，默认情况下会对所有的数字列执行求平均值的操作。上面是将单独的 City 列设置成索引，我们还可以将多列设置成索引，在将多列设置成索引时，只需要将多列的索引放到一个列表中即可，例如：
+```python
+import numpy as np
+import pandas as pd
+
+
+df = pd.DataFrame({'Date time': ['2020-10-01', '2020-10-01', '2020-10-02', '2020-10-02', '2020-10-01', '2020-10-01', '2020-10-02', '2020-10-02'],
+                   'AM/PM': ['AM', 'PM', 'AM', 'PM', 'AM', 'PM', 'AM', 'PM'],
+                   'City': ['Beijing', 'Beijing', 'Beijing', 'Beijing', 'Shanghai', 'Shanghai', 'Shanghai', 'Shanghai'],
+                   'Temperature': [14.0, 18.0, 14.6, 19, 20, 26.4, 21, 28.2],
+                   'Wind Speed': [11.2, 13.2, 15.9, 18.1, 9.7, 10.1, 11.4, 11]})
+
+
+print(df)
+print(df.pivot_table(index=['City', 'AM/PM']))
+```
+上面的例子中，在设置索引时，City 在前，AM/PM 在后，我们可以改变顺序，将 AM/PM 放在前面，City 放在后面，例如：
+```python
+import numpy as np
+import pandas as pd
+
+
+df = pd.DataFrame({'Date time': ['2020-10-01', '2020-10-01', '2020-10-02', '2020-10-02', '2020-10-01', '2020-10-01', '2020-10-02', '2020-10-02'],
+                   'AM/PM': ['AM', 'PM', 'AM', 'PM', 'AM', 'PM', 'AM', 'PM'],
+                   'City': ['Beijing', 'Beijing', 'Beijing', 'Beijing', 'Shanghai', 'Shanghai', 'Shanghai', 'Shanghai'],
+                   'Temperature': [14.0, 18.0, 14.6, 19, 20, 26.4, 21, 28.2],
+                   'Wind Speed': [11.2, 13.2, 15.9, 18.1, 9.7, 10.1, 11.4, 11]})
+
+
+print(df)
+print(df.pivot_table(index=['AM/PM', 'City']))
+```
+### 2.2 指定值以及做聚合计算
+在默认情况下，`pivot_talbe` 对所有的数字列做求平均值的计算，我们可以通过 values 参数指定我们所关心的列。例如：
+```python
+import numpy as np
+import pandas as pd
+
+
+df = pd.DataFrame({'Date time': ['2020-10-01', '2020-10-01', '2020-10-02', '2020-10-02', '2020-10-01', '2020-10-01', '2020-10-02', '2020-10-02'],
+                   'AM/PM': ['AM', 'PM', 'AM', 'PM', 'AM', 'PM', 'AM', 'PM'],
+                   'City': ['Beijing', 'Beijing', 'Beijing', 'Beijing', 'Shanghai', 'Shanghai', 'Shanghai', 'Shanghai'],
+                   'Temperature': [14.0, 18.0, 14.6, 19, 20, 26.4, 21, 28.2],
+                   'Wind Speed': [11.2, 13.2, 15.9, 18.1, 9.7, 10.1, 11.4, 11]})
+
+
+print(df)
+print(df.pivot_table(index=['City', 'AM/PM'], values=['Temperature']))
+```
+上面的例子中，我们通过 values 参数指定 Temperature，这样便只展示 
+Temperature 列的值，并且只对 Temperature 列求平均值。默认情况下，对数字列执行的是求平均值的运算，我们也可以通过 aggfunc 指定我们想要进行的运算。例如：
+```python
+import numpy as np
+import pandas as pd
+
+
+df = pd.DataFrame({'Date time': ['2020-10-01', '2020-10-01', '2020-10-02', '2020-10-02', '2020-10-01', '2020-10-01', '2020-10-02', '2020-10-02'],
+                   'AM/PM': ['AM', 'PM', 'AM', 'PM', 'AM', 'PM', 'AM', 'PM'],
+                   'City': ['Beijing', 'Beijing', 'Beijing', 'Beijing', 'Shanghai', 'Shanghai', 'Shanghai', 'Shanghai'],
+                   'Temperature': [14.0, 18.0, 14.6, 19, 20, 26.4, 21, 28.2],
+                   'Wind Speed': [11.2, 13.2, 15.9, 18.1, 9.7, 10.1, 11.4, 11]})
+
+
+print(df)
+print(df.pivot_table(index=['City', 'AM/PM'], values=['Temperature'], aggfunc='sum'))
+```
+aggfunc 的值也可以是一个字典，例如：
+```python
+import numpy as np
+import pandas as pd
+
+
+df = pd.DataFrame({'Date time': ['2020-10-01', '2020-10-01', '2020-10-02', '2020-10-02', '2020-10-01', '2020-10-01', '2020-10-02', '2020-10-02'],
+                   'AM/PM': ['AM', 'PM', 'AM', 'PM', 'AM', 'PM', 'AM', 'PM'],
+                   'City': ['Beijing', 'Beijing', 'Beijing', 'Beijing', 'Shanghai', 'Shanghai', 'Shanghai', 'Shanghai'],
+                   'Temperature': [14.0, 18.0, 14.6, 19, 20, 26.4, 21, 28.2],
+                   'Wind Speed': [11.2, 13.2, 15.9, 18.1, 9.7, 10.1, 11.4, 11]})
+
+
+print(df)
+print(df.pivot_table(index=['City', 'AM/PM'], values=['Temperature'], aggfunc= {'Temperature': 'sum'}))
+```
+当 aggfunc 的值为一个字典时，我们可以一次指定多个计算函数，例如：
+```python
+import numpy as np
+import pandas as pd
+
+
+df = pd.DataFrame({'Date time': ['2020-10-01', '2020-10-01', '2020-10-02', '2020-10-02', '2020-10-01', '2020-10-01', '2020-10-02', '2020-10-02'],
+                   'AM/PM': ['AM', 'PM', 'AM', 'PM', 'AM', 'PM', 'AM', 'PM'],
+                   'City': ['Beijing', 'Beijing', 'Beijing', 'Beijing', 'Shanghai', 'Shanghai', 'Shanghai', 'Shanghai'],
+                   'Temperature': [14.0, 18.0, 14.6, 19, 20, 26.4, 21, 28.2],
+                   'Wind Speed': [11.2, 13.2, 15.9, 18.1, 9.7, 10.1, 11.4, 11]})
+
+
+print(df)
+print(df.pivot_table(index=['City', 'AM/PM'], values=['Temperature'], aggfunc= {'Temperature': ['sum', 'mean', 'count']}))
+```
+在上面的例子，我们指定了三个函数，分别是 sum、mean、count。
+### 2.3 指定列索引
+上面讲了 index、values 以及 aggfunc 参数的设置，下面来讲下 columns 参数的设置。例如：
+```python
+import numpy as np
+import pandas as pd
+
+
+df = pd.DataFrame({'Date time': ['2020-10-01', '2020-10-01', '2020-10-02', '2020-10-02', '2020-10-01', '2020-10-01', '2020-10-02', '2020-10-02'],
+                   'AM/PM': ['AM', 'PM', 'AM', 'PM', 'AM', 'PM', 'AM', 'PM'],
+                   'City': ['Beijing', 'Beijing', 'Beijing', 'Beijing', 'Shanghai', 'Shanghai', 'Shanghai', 'Shanghai'],
+                   'Temperature': [14.0, 18.0, 14.6, 19, 20, 26.4, 21, 28.2],
+                   'Wind Speed': [11.2, 13.2, 15.9, 18.1, 9.7, 10.1, 11.4, 11]})
+
+
+print(df)
+print(df.pivot_table(index=['City'], columns=['Date time']))
+```
+上面的例子中，将 Date time 设置成列索引，默认对各个数字列进行求平均值的运算，同样的我们也可以指定其他的计算函数。例如：
+```python
+import numpy as np
+import pandas as pd
+
+
+df = pd.DataFrame({'Date time': ['2020-10-01', '2020-10-01', '2020-10-02', '2020-10-02', '2020-10-01', '2020-10-01', '2020-10-02', '2020-10-02'],
+                   'AM/PM': ['AM', 'PM', 'AM', 'PM', 'AM', 'PM', 'AM', 'PM'],
+                   'City': ['Beijing', 'Beijing', 'Beijing', 'Beijing', 'Shanghai', 'Shanghai', 'Shanghai', 'Shanghai'],
+                   'Temperature': [14.0, 18.0, 14.6, 19, 20, 26.4, 21, 28.2],
+                   'Wind Speed': [11.2, 13.2, 15.9, 18.1, 9.7, 10.1, 11.4, 11]})
+
+
+print(df)
+print(df.pivot_table(index=['City'], columns=['Date time'], aggfunc='sum'))
+```
+## 3.总结
+本节课我们讲述了 DataFrame 对象的重塑和对 DataFrame 对象进行透视。
+[image:B61C2453-599C-4A00-9EE0-041DA7E1C44B-3895-00006698EEF368AF/B4BC5F11-94D9-4E3D-A360-199E38D60875.png]

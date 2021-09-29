@@ -1,0 +1,337 @@
+---
+layout: post
+title:  "第十五节时间序列"
+date:   2021-09-29 18:09:28 +0800
+categories: jekyll update
+---
+上节课我们讲述了 DataFrame 对象的重塑和透视表。
+
+[image:FACEA1C9-E1FA-45F4-A05F-8CCCE48A3295-3895-000066A1D09F7BDB/B4BC5F11-94D9-4E3D-A360-199E38D60875.png]
+
+本节课我们来讲述时间序列。
+## 1.时间序列
+时间序列数据是一种重要的结构化数据形式，应用于多个领域，包括金融学、经济学、物理学等。在多个时间点观察或测量到的任何事物都可以形成一段时间序列。很多时间序列是固定频率的，也就是说，数据点是根据某种规律定期出现的（比如每 15 秒、每 5 分钟、每月出现一次）。时间序列也可以是不定期的。
+### 1.1 时间序列的创建
+pandas 最基本的时间序列类型就是以时间戳（通常以 Python 字符串或 datatime 对象表示）为索引的 Series。
+```python
+from datetime import datetime
+import pandas as pd
+import numpy as np
+
+dates = pd.DatetimeIndex(['2021-08-09', '2021-08-10', '2021-08-11', '2021-08-12'])
+ts = pd.Series(np.random.randint(1, 10, 4), index=dates)
+print(ts)
+print(ts.index)
+```
+上述代码通过 DatetimeIndex 函数将字符串类型的列表转换成时间序列的索引。我们也可以将时间类型的列表直接作为时间序列的索引，例如：
+```python
+from datetime import datetime
+import pandas as pd
+import numpy as np
+
+
+dates = [datetime(2021,8,9), datetime(2021,8,10), datetime(2021,8,11), datetime(2021,8,12)]
+ts = pd.Series(np.random.randint(1, 10, 4), index=dates)
+print(ts)
+print(ts.index)
+```
+### 1.2 索引和切片
+当根据索引来选取数据时，时间序列和其他的序列很像。例如：
+```python
+from datetime import datetime
+import pandas as pd
+import numpy as np
+
+
+dates = [datetime(2021,8,9), datetime(2021,8,10), datetime(2021,8,11), datetime(2021,8,12)]
+ts = pd.Series(np.random.randint(1, 10, 4), index=dates)
+print(ts['2021-08-09'])
+print(ts['20210809'])
+print(ts['08/09/2021'])
+```
+上面代码中的三种日期的写法都可以正确访问时间序列的元素。同样的，我们还可以对时间序列进行切片操作。例如：
+```python
+from datetime import datetime
+import pandas as pd
+import numpy as np
+
+
+dates = [datetime(2021,8,9), datetime(2021,8,10), datetime(2021,8,11), datetime(2021,8,12)]
+ts = pd.Series(np.random.randint(1, 10, 4), index=dates)
+print(ts['2021-08-09':'2021-08-11'])
+print(ts[:'2021-08-10'])
+print(ts['2021-08-10':])
+```
+## 2.日期的范围、频率以及移动
+pandas 中的原生时间序列一般被认为是不规则的，也就是说，它们没有固定的频率。对于大部分应用程序而言，这是无所谓的。但是，它常常需要以某种相对固定的频率进行分析，比如每日、每 月、每15分钟等(这样自然会在时间序列中引入缺失值)。幸运的是，pandas有一整套标准时间序列频率以及用于重采样、频率推断、生成固定频率日期范围的工具。
+### 2.1 生成固定频率的时间序列
+pandas 中的 date_range 函数可用于根据指定的频率生成指定长度的DatetimeIndex。例如：
+```python
+from datetime import datetime
+import pandas as pd
+import numpy as np
+
+
+ts = pd.Series(np.random.randint(1, 10, 4), index=pd.date_range('2021-08-09', '2021-08-12'))
+print(ts)
+print(ts.index)
+```
+默认情况下，date_range 会产生按天计算的时间点。第一个参数为起始日期，第二个参数为结束日期，如果只传入起始或结束日期，那就还得传入一个表示一段时间的数字，例如：
+```python
+from datetime import datetime
+import pandas as pd
+import numpy as np
+
+
+ts = pd.Series(np.random.randint(1, 10, 4), index=pd.date_range(start='2021-08-09', periods=4))
+print(ts)
+print(ts.index)
+```
+上面的代码由于只传入了起始日期，所以还得传入一个表示一段时间的数字。同样的，我们也可以只传入结束日期，例如：
+```python
+from datetime import datetime
+import pandas as pd
+import numpy as np
+
+
+ts = pd.Series(np.random.randint(1, 10, 4), index=pd.date_range(end='2021-08-12', periods=4))
+print(ts)
+print(ts.index)
+```
+上面的代码只传入了结束日期，同样的要指定一个表示一段时间的数字。默认情况下，date_range 选定的频率为天，我们也可以通过参数 freq 指定其他的频率。例如：
+```python
+from datetime import datetime
+import pandas as pd
+import numpy as np
+
+
+ts = pd.Series(np.random.randint(1, 10, 4), index=pd.date_range(end='2021-08-12', periods=4, freq = 'H'))
+print(ts)
+print(ts.index)
+```
+上面代码指定频率为小时，于是生成了时间间隔为小时的索引。我们还可以指定频率为 BM（表示每月最后一个工作日）。
+```python
+from datetime import datetime
+import pandas as pd
+import numpy as np
+
+
+ts = pd.Series(np.random.randint(1, 10, 4), index=pd.date_range(end='2021-08-12', periods=4, freq = 'BM'))
+print(ts)
+print(ts.index)
+```
+上面的代码列出了 4、5、6、7月每个月的最后一个工作日。常用的基础频率（不完整）如下图所示：
+[image:1E0CFB1F-5DE7-4E86-96B2-3AFB06C8AAEF-3895-00007F8188E9F8B6/453CC594-1E7D-4E85-B46F-D324A2C991E1.png]
+### 2.2 非基础频率及日期偏移量
+在 pandas 中，非基础频率可以由一个基础频率和一个乘数组成。例如：
+```python
+from datetime import datetime
+import pandas as pd
+import numpy as np
+
+
+ts = pd.Series(np.random.randint(1, 10, 4), index=pd.date_range(end='2021-08-12', periods=4, freq = '4D'))
+print(ts)
+print(ts.index)
+```
+上面的代码中，我们指定频率为 4 天。我们再来看一个例子：
+```python
+from datetime import datetime
+import pandas as pd
+import numpy as np
+
+
+ts = pd.Series(np.random.randint(1, 10, 4), index=pd.date_range(end='2021-08-12', periods=4, freq = '1H30MIN'))
+print(ts)
+print(ts.index)
+```
+上面的代码中，我们指定频率为 1 小时 30 分。
+### 2.3 WOM 日期
+WOM(Week Of Month) 是一种非常实用的频率类,它以 WOM 开头。它使你能获得诸如“每月第 3 个星期五”之类的日期，例如：
+```python
+from datetime import datetime
+import pandas as pd
+import numpy as np
+
+
+ts = pd.Series(np.random.randint(1, 10, 4), index=pd.date_range(end='2021-08-12', periods=4, freq='WOM-3FRI'))
+print(ts)
+print(ts.index)
+```
+上面的代码获取 4、5、6、7 这四个月每个月的第 3 个星期五。
+### 2.4 移动数据
+我们可以使用 pandas 中的 shift 方法将时间序列中的数据前移或后移。例如：
+```python
+from datetime import datetime
+import pandas as pd
+import numpy as np
+
+
+ts = pd.Series(np.random.randint(1, 10, 4), index=pd.date_range(end='2021-08-12', periods=4, freq='D'))
+print(ts)
+print(ts.shift(2))
+print(ts.shift(-2))
+```
+上面的代码，在索引不变的情况下，对时间序列中的数据前移或后移。
+## 3.时区处理
+因为我们讲的是时间序列，所以就会牵扯到对时区的处理。在默认情况下，我们创建的时间类型的索引是不含时区信息的，例如：
+```python
+from datetime import datetime
+import pandas as pd
+import numpy as np
+
+
+ts = pd.Series(np.random.randint(1, 10, 4), index=pd.date_range(end='2021-08-12', periods=4, freq='D'))
+
+print(ts.index.tz)
+```
+上述代码输出的时区信息为 None，也就是默认不包含时区信息。我们可以在创建时间序列时指定时区，例如：
+```python
+from datetime import datetime
+import pandas as pd
+import numpy as np
+
+
+ts = pd.Series(np.random.randint(1, 10, 4), index=pd.date_range(end='2021-08-12', periods=4, freq='D', tz='UTC'))
+
+print(ts.index.tz)
+```
+上述代码在创建时间序列时，指定了 UTC（协调世界时） 时区。另外我们也可以通过 tz_localize 为时间序列指定时区，例如：
+```python
+from datetime import datetime
+import pandas as pd
+import numpy as np
+
+
+ts = pd.Series(np.random.randint(1, 10, 4), index=pd.date_range(end='2021-08-12', periods=4, freq='D'))
+
+print(ts.index.tz)
+
+ts_utc = ts.tz_localize('UTC')
+print(ts_utc.index.tz)
+```
+在指定了时区之后，我们便可以使用 tz_convert 进行时区间的转换，例如：
+```python
+from datetime import datetime
+import pandas as pd
+import numpy as np
+
+ts = pd.Series(np.random.randint(1, 10, 4), index=pd.date_range(end='2021-08-12', periods=4, freq='D'))
+
+print(ts.index.tz)
+
+ts_utc = ts.tz_localize('UTC')
+print(ts_utc.index.tz)
+print(ts_utc.index)
+
+ts_shanghai = ts_utc.tz_convert('Asia/Shanghai')
+print(ts_shanghai.index.tz)
+print(ts_shanghai.index)
+```
+上面的代码，我们通过 tz_convert 将时区有 UTC 转换为 Asia/Shanghai。
+## 4.重采样
+重采样(resampling)指的是将时间序列从一个频率转换到另一个频率的处理过程。将高频率数据聚合到低频率称为降采样(downsampling)，而将低频率数据转换到高频率则称为升采样 (upsampling)。
+
+pandas 对象都带有一个 resample 方法，它是各种频率转换工作的主力函数。
+### 4.1 降采样
+将数据聚合到低频率是常见的时间序列处理任务。在用 resample 对数据进行降采样时，需要考虑两样东西：
++ 各个区间那边是闭合的。
++ 如何标记各个聚合面，用区间的开头还是结尾。
+我们来看例子：
+```python
+from datetime import datetime
+import pandas as pd
+import numpy as np
+
+ts = pd.Series(np.arange(9), index=pd.date_range('2021-08-12', periods=9, freq='T'))
+
+print(ts)
+print(ts.resample('3T').sum())
+```
+上面的代码中，首先生成一个时间序列，频率为 1 分钟，然后对这个时间序列依据 3 分钟进行降采样。在默认情况下，`label='left’，closed='left'`。如下图所示：
+[image:210C3275-D6B6-4DEA-B65E-A5EF75341B79-3895-0000889DFC359B65/BB6C68B2-24BB-4357-9EB5-EBB7A6C7F463.png]
+上面是默认的情况，我们还可以通过参数来指定区间那边是闭合以及聚合面是用区间的开头还是结尾。例如指定 `label='right'`:
+```python
+from datetime import datetime
+import pandas as pd
+import numpy as np
+
+ts = pd.Series(np.arange(9), index=pd.date_range('2021-08-12', periods=9, freq='T'))
+
+print(ts)
+print(ts.resample('3T', label='right').sum())
+```
+如下图所示：
+[image:964F6452-586E-4949-9F44-70E5639C3CBD-3895-000088E6BC0ACA47/8FE029B2-C851-4BB3-B081-B63D1205AE70.png]
+指定 `closed='right'`:
+```python
+from datetime import datetime
+import pandas as pd
+import numpy as np
+
+ts = pd.Series(np.arange(9), index=pd.date_range('2021-08-12', periods=9, freq='T'))
+
+print(ts)
+print(ts.resample('3T', closed='right').sum())
+```
+如下图所示：
+[image:6F36235D-C9E5-4FAC-9E57-27108E5300C9-3895-000089245572E95C/1A6D58CB-5504-4FB9-B873-6002F1DCB644.png]
+指定 `label='right',closed='right'`:
+```python
+from datetime import datetime
+import pandas as pd
+import numpy as np
+
+ts = pd.Series(np.arange(9), index=pd.date_range('2021-08-12', periods=9, freq='T'))
+
+print(ts)
+print(ts.resample('3T', closed='right', label='right').sum())
+```
+如下图所示：
+[image:A0A23A50-87DD-48B6-B1BE-2A8AAC72D39D-3895-0000895690518C05/2963085A-5308-4903-AE3A-56C6E6EB769A.png]
+### 4.2 升采样
+在将数据从低频率转换到高频率时，就不需要聚合了。例如：
+```python
+from datetime import datetime
+import pandas as pd
+import numpy as np
+
+df = pd.DataFrame(np.random.randint(1, 10, 8).reshape((2, 4)), 
+                 index = pd.date_range('2021-07-01', periods=2, freq='W-MON'),
+                 columns =['open', 'low', 'high', 'close'])
+
+print(df)
+```
+上面例子中时间序列的频率为一周，取得是每周周一这一天。下面将频率由周改为天。例如：
+```python
+from datetime import datetime
+import pandas as pd
+import numpy as np
+
+df = pd.DataFrame(np.random.randint(1, 10, 8).reshape((2, 4)), 
+                 index = pd.date_range('2021-07-01', periods=2, freq='W-MON'),
+                 columns =['open', 'low', 'high', 'close'])
+
+print(df)
+
+df_daily = df.resample('D').asfreq()
+print(df_daily)
+```
+上述代码将频率由周改为天，不存在的数据有 NaN 填充。对缺失值，我们可以进行填充。例如：
+```python
+from datetime import datetime
+import pandas as pd
+import numpy as np
+
+df = pd.DataFrame(np.random.randint(1, 10, 8).reshape((2, 4)), 
+                 index = pd.date_range('2021-07-01', periods=2, freq='W-MON'),
+                 columns =['open', 'low', 'high', 'close'])
+
+print(df)
+
+df_daily = df.resample('D').asfreq().ffill()
+print(df_daily)
+```
+上面的代码对升频率的过程中产生的缺失值进行填充。
+## 5.总结
+[image:E5CDD7CE-3FCB-4004-B209-02A275EC4EDB-3895-00008A38827FD200/344622B7-57EA-45CF-A06D-62D181CC2F09.png]

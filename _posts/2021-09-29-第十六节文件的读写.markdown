@@ -1,0 +1,144 @@
+---
+layout: post
+title:  "第十六节文件的读写"
+date:   2021-09-29 19:09:28 +0800
+categories: jekyll update
+---
+上节课我们介绍了时间序列。
+[image:D84EE7E0-4F5E-4E4D-98EF-2BBD4558E6A7-3895-00008FD95F727058/344622B7-57EA-45CF-A06D-62D181CC2F09.png]
+本节课我们来介绍数据的输入和输出。
+## 1.csv 文件的读取
+csv 文件的读取使用 `read_csv` 方法，将需要读取的文件作为参数传入到 `read_csv` 方法中。例如：
+```python
+import pandas as pd
+
+df = pd.read_csv('top10_points.csv')
+print(df)
+```
+上面的代码将读取到的数据存入 DataFrame 对象 df 中，观察生成的 df，我们发现 csv 文件的标题行成为了 df 的列索引。但是并不是每个 csv 文件都有标题行。例如：
+```python
+import pandas as pd
+
+df = pd.read_csv('top10_points2.csv')
+print(df)
+```
+在文件 `top10_points2.csv` 中，我们去掉了标题行，从最终的读取结果中可以看出，csv 文件的第一行内容成为了列索引，这显示是不对的。在读取不含标题行的 csv 文件中，我们可以指定参数 `header=None`，例如：
+```python
+import pandas as pd
+
+df = pd.read_csv('top10_points2.csv', header=None)
+print(df)
+```
+从上面代码的输出结果中可以看出，当我们指定参数 `header=None`，系统会默认生成列索引，列索引从 0 开始。除了让系统默认生成列索引之外，我们还可以明确指定列索引，例如：
+```python
+import pandas as pd
+
+df = pd.read_csv('top10_points2.csv', 
+                 names=['PLAYER','POSITION','TEAM','POINTS','TRB','AST','STL','BLK','AGE'])
+
+print(df)
+```
+上面的代码中，我们通过参数 names 明确指定了列索引。上面的几个例子，行索引都是默认生成的，当然我们也可以明确指定行索引，例如：
+```python
+import pandas as pd
+
+df = pd.read_csv('top10_points2.csv', 
+                 names=['PLAYER','POSITION','TEAM','POINTS','TRB','AST','STL','BLK','AGE'],
+                 index_col='PLAYER')
+
+print(df)
+```
+上面的代码中，我们通过参数 index_col 明确指定了 PLAYER 这列为行的索引。如果希望将多个列做成一个层次化索引，只需传入由列编号或列名组成的列表即可：
+```python
+import pandas as pd
+
+df = pd.read_csv('top10_points2.csv', 
+                 names=['PLAYER','POSITION','TEAM','POINTS','TRB','AST','STL','BLK','AGE'],
+                 index_col=['TEAM','POSITION'])
+
+print(df)
+```
+上面代码中，将 TEAM 和 POSITION 组成的列表赋值给 index_col，从而设置了多列索引。在有些情况下，csv 文件中会包含一些无效的信息，例如注释信息，这时候在进行读取的时候，需要忽略这些信息，我们来看一个例子：
+```python
+import pandas as pd
+
+df = pd.read_csv('top10_points3.csv', skiprows=[0, 2, 3])
+
+print(df)
+```
+上面的例子中，top10_points3.csv 文件的第 1、3、4 行为注释行，所以在读取的时候需要传入参数 skiprows 来忽略这几行。缺失值处理是文件解析任务中的一个重要组成部分。缺失数据经常是要么没有(空字符串)，要么 用某个标记值表示。默认情况下，pandas 会用一组经常出现的标记值进行识别，比如 NA 及 NULL，我们来看一个例子：
+```python
+import pandas as pd
+
+df = pd.read_csv('top10_points4.csv')
+
+print(df)
+```
+在上面的例子中，top10_points4.csv 文件有缺失值（分别用NA
+、NULL和空字符串表示），在读入到 df 后，缺失值用 NaN 表示。默认情况下，pandas 会将空字符串、NA 以及 NULL 看成是缺失值。在读取的时候，我们也可以指定那些值是缺失值。例如：
+```python
+import pandas as pd
+
+df = pd.read_csv('top10_points4.csv', na_values=['PG'])
+
+print(df)
+```
+在上面的例子中，除了默认的缺失值外，我们还指定 PG 为缺失值，从结果中可以看出，在读到 PG 值时，用 NaN 表示。我们还可以针对特定的列指定缺失值。例如：
+```python
+import pandas as pd
+
+df = pd.read_csv('top10_points4.csv', na_values={'POSITION':'PG', 'AGE':27})
+
+print(df)
+```
+在上面的例子中，除了默认的缺失值之外，我们指定 POSITION 列的 PG 和 AGE 列的 27 为缺失值。当我们指定 AGE 列的 27 为缺失值时，其他列的 27 并不会被当成缺失值。如果读取的文件比较大，如果只想读取几行，通过 nrows 进行指定即可。例如：
+```python
+import pandas as pd
+
+df = pd.read_csv('top10_points.csv', nrows=3)
+
+print(df)
+```
+除了可以指定一次读取的行数外，我们还可以分块读取数据，例如：
+```python
+import pandas as pd
+
+df = pd.read_csv('top10_points.csv', chunksize=2)
+
+for chunk in df:
+    print(chunk)
+```
+上面的例子中，我们分块读取数据，每块包含 2 行数据。
+## 2.csv 文件的写入
+上面讲的是从 csv 文件中读取数据，下面来讲将数据写入到 csv 文件中。
+```python
+import pandas as pd
+
+df = pd.read_csv('top10_points.csv')
+df.to_csv('out.csv')
+```
+上面的例子中，我们使用 to_csv 方法将数据写入到文件 out.csv。打开写入的文件可以看到，out.csv 文件比 `top10_points.csv` 文件多了列，这一列为索引。当然，我们也可以忽略索引，例如：
+```python
+import pandas as pd
+
+df = pd.read_csv('top10_points.csv')
+df.to_csv('out2.csv',index=False)
+```
+上面的例子中，设置了 index=False 参数，我们发现在设置了参数后，out2.csv 便不再含有行索引。我们也可以忽略列索引，例如：
+```python
+import pandas as pd
+
+df = pd.read_csv('top10_points.csv')
+df.to_csv('out3.csv',index=False,header=False)
+```
+上面的例子中，又设置了 header=False 参数，我们发现在设置了此参数后，out3.csv 便不再含有列索引。上面的例子中都是列出了所有的数据，当然我们也可以只写出一部分的列，例如：
+```python
+import pandas as pd
+
+df = pd.read_csv('top10_points.csv')
+df.to_csv('out4.csv',index=False,columns=['PLAYER','POSITION', 'TEAM', 'POINTS'])
+```
+上面的例子中，我们便只列出了 PLAYER、POSITION、TEAM 和 POINTS 这几列。
+## 3.总结
+本节课我们讲述了 csv 文件的读取和写入。
+[image:81C405D0-7011-49C3-8919-301E0B377ED3-3895-00009CAD2591AEB1/075B9A40-53D1-4034-ADE9-9BCB3F082A75.png]
