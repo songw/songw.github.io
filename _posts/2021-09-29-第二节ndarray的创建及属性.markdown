@@ -5,7 +5,7 @@ date:   2021-09-29 09:09:28 +0800
 categories: jekyll update
 ---
 上节课我们介绍了 numpy 的多维数组以及多维数组相对于列表的优势。
-[image:CF07B654-1EBA-4BDE-A8F7-32D207E0E96E-3647-00001DE45DAC8185/A4140B43-8D54-4CB0-B383-87C762104A5E.png]
+![image](https://user-images.githubusercontent.com/1639828/135186664-b79612ec-ee54-414f-8133-088514d71460.png)
 ## 1.ndarray 的创建及获取属性
 上节课我们有提到过 ndarray 的创建，我只需要将列表传入到 np.array() 函数中。例如：
 ```python
@@ -218,5 +218,5 @@ my_arr = np.random.random((2, 3))
 print(my_arr)
 ```
 ## 3.总结
-[image:547CE92B-0706-4E9B-A00E-A40FDAC6E68D-3647-000022CFAFE9C80C/805E0CF1-3AB5-41F6-B4E1-7149AEE7D6AE.png]
+![image](https://user-images.githubusercontent.com/1639828/135186749-35c7e395-f64d-4496-b0e9-bd687bb38f8b.png)
 

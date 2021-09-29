@@ -5,7 +5,7 @@ date:   2021-09-29 13:09:28 +0800
 categories: jekyll update
 ---
 上节课讲述了 ndarray 的重塑、组合和拆分。
-[image:63EC6345-D934-4D8E-AD43-E0AC7EC2E0A4-3647-000051E6C2FCAD88/1E9CD5A4-AA9B-4CCB-BBDA-82FE75789358.png]
+![image](https://user-images.githubusercontent.com/1639828/135187637-d0254ec9-dca6-434c-b397-b67325da16e8.png)
 本节课讲述用于 ndarray 的文件操作。我们可以使用 numpy 提供的方法将 ndarray 存储到文件，还可以从存储 ndarray 的文件中读取 ndarray。
 
 ## 1 单个数组的读写
@@ -72,4 +72,4 @@ print(my_arr1)
 print(my_arr2)
 ```
 ## 3 总结
-[image:40DABB4E-E667-47D0-91AF-7E62875D819F-3647-00005335C85B1704/B905CD50-8BCC-4B21-9419-FB8635E79F03.png]
+![image](https://user-images.githubusercontent.com/1639828/135187685-f330d0d1-ae48-4335-9f7b-a43cf89c4ece.png)
