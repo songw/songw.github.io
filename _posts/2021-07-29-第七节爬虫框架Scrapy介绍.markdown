@@ -20,6 +20,7 @@ Scrapy 的架构图如下所示：
 + Item Pipelines：Item Pipeline 负责处理被 spider 提取出来的 item。典型的处理有清理、 验证及持久化(例如存取到数据库中)。
 + Downloader Middlewares：下载器中间件是在引擎及下载器之间的特定钩子(specific hook)，处理 Downloader 传递给引擎的 response。 其提供了一个简便的机制，通过插入自定义代码来扩展 Scrapy 功能。
 + Spider Middlewares：Spider 中间件是在引擎及 Spider 之间的特定钩子(specific hook)，处理 spider 的输入(response)和输出(items 及 requests)。 其提供了一个简便的机制，通过插入自定义代码来扩展 Scrapy 功能。
+
 ## 2.组件间的数据流
 上述各个组件间的数据流由执行引擎控制，其过程如下：
 1. 引擎从爬虫得到初始请求。
@@ -31,6 +32,7 @@ Scrapy 的架构图如下所示：
 7. 爬虫处理响应，而后通过爬虫中间件将抓取到的 items 和新的请求返回到引擎。
 8. 引擎将处理好的items发送到Item Pipelines，然后发送已处理的请求到调度器，并询问下个可能的请求。
 9. 这个过程重复进行（从1开始），直到调度器没有更多的请求。
+
 ## 3.项目创建
 我们可以通过命令行来创建一个 Scrapy 项目，命令为
 `scrapy startproject hello_scrapy` hello_scrapy 为项目名称。创建的 Scrapy 项目的文件结构如下所示：
