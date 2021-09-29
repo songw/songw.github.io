@@ -11,11 +11,11 @@ categories: 数据可视化
 
 前面讲述的图表绘制方法一次只会绘制一张图表，但是有些情况下，我们希望把一组图放在一起进行比较，有没有什么好的方法呢？matplotlib 中提供的 subplots() 可以很好的解决这个问题。通过调用 subplots() 可以将整个绘图区域分成 m * n 个子区域，每个子区域都可以绘制一个子图。
 当 m = 1，n = 2 时，绘图区域的划分情况如下所示：
-[image:F0BD3CC2-25C3-43BE-82C8-0F42B5A2FE46-689-0001B5CEEB7E8A8C/7C60C07F-B84C-418E-8F4F-19551BB08695.png]
+![image](https://user-images.githubusercontent.com/1639828/135210013-80956f27-fd9f-42cc-b3df-401a4dd9f649.png)
 当 m = 2，n = 1 时，绘图区域的划分情况如下所示：
-[image:5B36A0FB-4BE0-4D56-AA96-44C7853C0325-689-0001B5E0090F108C/3776AFC8-0CD4-48F1-A05C-3070043E4D99.png]
+![image](https://user-images.githubusercontent.com/1639828/135210059-e829b049-dc66-4fcf-8af7-03f978bd6ad3.png)
 当 m = 2，n = 2 时，绘图区域的划分情况如下所示：
-[image:0D4DD8C0-F38B-444B-B06C-566E7D202699-689-0001B5FA1D640DE7/13FB6A15-D95D-4D16-A4CA-0D7E1F8D61BF.png]
+![image](https://user-images.githubusercontent.com/1639828/135210105-2e45a61e-4c41-4f29-a9ff-16825142588a.png)
 ## 2.子图的绘制
 下面我们通过例子来看 subplots() 函数的使用。
 ### 2.1 一个子图
@@ -33,7 +33,7 @@ ax.set_title('plot sin')
 plt.show()
 ```
 在上面的代码中，调用 subplots() 函数时，没有传入参数，这样在默认情况下整个绘图区域只会包含一个子区域。subplots() 函数会返回两个值，一个是 fig，一个是 ax。接下来便可以使用 ax 对子图进行绘制。代码执行后得到的图形如下图所示：
-[image:EF2DF720-8559-4F95-9C96-F95BCC9A2DA4-689-0001B762F2DCB940/9769DC7B-AEAB-4D0B-853A-C617BDCF05DE.png]
+![image](https://user-images.githubusercontent.com/1639828/135210226-33fa31e7-2573-4df4-b3ff-6c40034cd141.png)
 ### 2.2 多个子图
 ```python
 import matplotlib.pyplot as plt
@@ -54,7 +54,7 @@ ax[1].set_title('plot cos')
 plt.show()
 ```
 上面代码中，向 subplots() 函数传入参数 nrows 和 ncols，值分别为 2 和 1。这样整个绘图区域会被划分为两个子区域。返回值 ax 为包含两个子区域对象的数组，我们可以使用索引的方式来访问每个对象，下面便可以使用这两个对象进行绘图。代码执行后得到的图形如下图所示：
-[image:9B55EBAB-A9F0-4219-A164-C0D81DD85A6A-689-0001B8073EE90E19/EDA5EE64-A7A3-41E4-952A-2C89749FFDBB.png]
+![image](https://user-images.githubusercontent.com/1639828/135210284-064258c3-a433-4808-ae5a-9ae6bcb752cf.png)
 由于两个子图的横坐标相同，这样可以让两个子图共享横坐标。例如：
 ```python
 from os import sched_get_priority_max
@@ -77,7 +77,7 @@ ax[1].set_title('plot cos')
 plt.show()
 ```
 为了让两个子图共享横坐标，只需要在调用 subplots() 函数时传入参数 sharex，并设置其值为 True。代码执行后得到的图形如下图所示：
-[image:E114486F-DAFE-472E-BC3F-53C52492CDE0-689-0001B8380CC5793B/FA370687-839F-410C-A691-6D137D8940AC.png]
+![image](https://user-images.githubusercontent.com/1639828/135210350-0e389de2-1c4f-4f76-9a8b-8d5a9017131a.png)
 上面两个子图是上下排列，我们再来看看左右排列的情况。例如：
 ```python
 from os import sched_get_priority_max
@@ -100,7 +100,7 @@ ax[1].set_title('plot cos')
 plt.show()
 ```
 为了让两个子图左右排列，只需要将参数 nrows 和 ncols 的值分别设置为 1 和 2。代码执行后得到的图形如下图所示：
-[image:F3C192A4-E789-41B6-A3B1-34C6BF93BDD2-689-0001B864BBA43305/CA085479-72AD-4D67-AD76-71D3435E630B.png]
+![image](https://user-images.githubusercontent.com/1639828/135210392-1b483a98-6682-47b7-acba-50f6c776f16b.png)
 上面图形中的子图长和宽不是很协调，下面我们通过参数来调整图形的长和宽的比例，例如：
 ```python
 from os import sched_get_priority_max
@@ -123,7 +123,7 @@ ax[1].set_title('plot cos')
 plt.show()
 ```
 上面的代码中，在调用 subplots() 函数时，传入参数 figsize 来设置图形的长和宽。代码执行后得到的图形如下图所示：
-[image:58466E1E-A589-4E49-AA1F-DAFFFD4F349B-689-0001B8E913DE2E45/9A71F178-95DA-469D-8617-B56AFFA189F4.png]
+![image](https://user-images.githubusercontent.com/1639828/135210440-a8cba8e8-11f5-432a-aed6-495a69938b34.png)
 上面图形中，两个子图左右排列而且纵坐标轴相同，这样我们可以设置让两个子图共享纵坐标轴，例如：
 ```python
 from os import sched_get_priority_max
@@ -146,7 +146,7 @@ ax[1].set_title('plot cos')
 plt.show()
 ```
 为了让两个子图共享纵坐标轴，只需要向 subplots() 函数传入 sharey 参数，并设置其值为 True，代码执行后得到的图形如下图所示：
-[image:268A060A-2FE1-4819-8491-8FF0D327EB4E-689-0001B943BA4356C7/4F1B48DD-972E-48C3-A825-1687320C68BD.png]
+![image](https://user-images.githubusercontent.com/1639828/135210500-cfd5354e-d857-41ab-913b-e7d295fef1fc.png)
 上面的例子中，调用 subplots() 函数返回的是一维数组，下面我们来看一个返回多维数组的例子：
 ```python
 from os import sched_get_priority_max
@@ -178,7 +178,7 @@ ax[1,1].set_title('plot scatter cos')
 plt.show()
 ```
 在上面的代码中，ax 是一个 2 * 2 的数组，所以在进行索引的时候，需要使用二维数组的索引方法。代码执行后得到的图形如下图所示：
-[image:3C1AF425-C99F-4DA6-ADC0-7996082396DD-689-0001BC078851A8B5/1465B908-7A47-4CF8-9022-21508133FDCB.png]
+![image](https://user-images.githubusercontent.com/1639828/135210553-ee0efbbd-6366-4cb9-86f5-d479a88c1706.png)
 上面四个图，左右可以共享 y 轴的坐标，上下可以共享 x 轴的坐标，下面我们来设置共享坐标轴，例如：
 ```python
 from os import sched_get_priority_max
@@ -210,6 +210,6 @@ ax[1,1].set_title('plot scatter cos')
 plt.show()
 ```
 代码执行后得到的图形如下图所示：
-[image:9B12D715-6B43-4A4E-A408-A89EE4159FD8-689-0001BC2C2BCDABD3/6B703247-30EB-48FC-953D-66D8C568D06E.png]
+![image](https://user-images.githubusercontent.com/1639828/135210613-08837571-814f-4019-bf70-58bb6dbbd2ad.png)
 ## 3.总结
 本节课我们讲述了子图的绘制，它使得我们可以在同一个绘图区域绘制多个子图。
