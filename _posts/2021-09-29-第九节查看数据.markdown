@@ -5,7 +5,7 @@ date:   2021-09-29 16:09:28 +0800
 categories: jekyll update
 ---
 上节课我们介绍了 pandas 以及 Series、DataFrame 对象的创建。
-[image:74797BE2-6A5E-4964-A65A-A46970F78981-3647-000117135C9D2E67/BF4DEA08-59C7-42F1-8D03-A15393783D35.png]
+![image](https://user-images.githubusercontent.com/1639828/135190789-f4232f87-b5ec-4cf1-a591-0860df8c69a1.png)
 本节课我们来看下如何查看 Series、DataFrame 对象的数据。
 ## 1.查看一部分数据
 我们可以使用 head() 和 tail() 方法来查看 Series 对象或 DataFrame 对象的一小部分数据，默认查看的元素个数为 5 个，head() 展示头部的 5 个元素，tail() 展示尾部的 5 个元素，也可以自定义展示的元素个数。当 Series 对象或 DataFrame 对象包含的数据较多时，使用 head() 或 tail() 查看数据的结构会非常方便。
@@ -272,7 +272,7 @@ print(df.cumprod(axis='columns', skipna=False))
 ```
 除了上面的函数外，还有一些函数，见下表：
 
-[image:5D7542AA-E856-402F-BE3E-5454FE9DB3E1-3647-00012B601A002984/772419AB-26F2-4BD7-B965-7E6577780CC4.png]
+![image](https://user-images.githubusercontent.com/1639828/135190868-23c5deb6-bd0d-43bb-94c1-87eb42244e45.png)
 ## 4.describe() 函数
 pandas 还有一个方便的函数 describe()，可以一次产生多个汇总统计，在进行计算时，排除了 np.NaN。例如：
 ```python
@@ -508,4 +508,4 @@ print(df.sort_values(by=['High', 'Low']))
 ## 6.总结
 本节课我们讲述了如何查看数据。
 
-[image:65828465-A4FC-4935-88FE-024E88497FDB-5375-000007006A57590E/5AE6CE1B-0D8D-4DB1-AA5D-5E20F8BE4875.png]
+![image](https://user-images.githubusercontent.com/1639828/135190942-d99d8a70-8581-4528-a36e-44b69e02d8e0.png)
