@@ -6,10 +6,11 @@ categories: 网络爬虫
 ---
 
 上节课讲了豆瓣网 top250 电影信息的爬取，本节课我们来介绍一个强大的爬虫框架 Scrapy。Scrapy 是一个基于 Twisted 的异步处理框架，是纯 Python 实现的爬虫框架，其架构清晰，模块之间的耦合程度低，可扩展性极强，可以灵活完成各种需求。
+
 ## 1. Scrapy的架构
 Scrapy 的架构图如下所示：
 
-[image:EBA1F73A-9259-4CE5-AF20-D12A5C86BE35-1124-0001172D37BCC3F8/3FC04356-7A00-4768-A837-EEA35F8BB625.png]
+![image](https://user-images.githubusercontent.com/1639828/135231734-2e64af06-f42f-49fe-820d-147f4675d3a4.png)
 
 下面对上图中的各个组件做介绍：
 + Engine：引擎负责控制数据流在系统所有组件中流动，并在相应动作发生时触发事件。
@@ -33,7 +34,7 @@ Scrapy 的架构图如下所示：
 ## 3.项目创建
 我们可以通过命令行来创建一个 Scrapy 项目，命令为
 `scrapy startproject hello_scrapy` hello_scrapy 为项目名称。创建的 Scrapy 项目的文件结构如下所示：
-[image:84B59343-BEF4-4BFB-ABE5-A905F7FE5287-1124-0001193DC99BD2F2/5FB287CD-57CB-41F5-90AF-894CB08AEFB3.png]
+![image](https://user-images.githubusercontent.com/1639828/135232090-6869cf1c-e0df-4848-ac56-8f9e7ab2a8ee.png)
 各个文件的功能为：
 + scrapy.cfg：它是 Scrapy 项目的配置文件，其内定义了项目的配置文件路径、部署相关信息等内容。
 + items.py：它定义 Item 数据结构，所有的 Item 的定义都可以放这里。
