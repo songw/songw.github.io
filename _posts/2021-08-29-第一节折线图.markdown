@@ -25,7 +25,7 @@ plt.show()
 ```
 上述代码的第一行从 matplotlib 导入 pyplot 并起别名 plt。`dev_x、dev_y` 为两个列表，分别包含 11 个数据，接下来调用 plot 函数便可以进行作图，plot 函数的参数为两组数据，调用 plot 函数之后，还需要调用 show 函数，否则不会显示图形。上述代码得到的图形如下所示：
 
-[image:723BF4F1-48E2-4AF6-BD77-39B3C0E7F54D-689-000092427733B0AA/3738F85D-66B4-4137-B78F-95035AFD75B5.png]
+![image](https://user-images.githubusercontent.com/1639828/135198267-7fb107f5-65cd-4cd9-88dd-055ee4f1207c.png)
 上述图形中没有标识横坐标、纵坐标所表示的含义以及整个图形的标题。下面我们来添加上述信息：
 ```python
 from matplotlib import pyplot as plt
@@ -42,7 +42,7 @@ plt.title("年龄和薪水的关系")
 plt.show()
 ```
 上述代码通过 xlabel 函数添加横坐标代表的含义，通过 ylabel 函数添加纵坐标代表的含义，通过 title 函数添加图形的标题。添加上述信息之后的图形如下图所示：
-[image:E6E709C3-CA4E-4E57-A217-014381D2562E-689-000094B8911D1B5D/ADFD0A41-6274-45E7-A6ED-562899C08367.png]
+![image](https://user-images.githubusercontent.com/1639828/135198323-b5ebb260-5cb6-4217-aeb6-5258535130c9.png)
 上面做的图中只包含一条折线，现在我们来添加另外一条曲线。
 ```python
 from matplotlib import pyplot as plt
@@ -80,7 +80,7 @@ plt.title("年龄和薪水的关系")
 plt.show()
 ```
 执行完上述代码生成的图形如下图所示：
-[image:01D114EF-5C31-4D2D-B6D6-BA46BB4035B5-689-000095880F711161/E020A60F-8D7A-4048-BCFD-6966A827741D.png]
+![image](https://user-images.githubusercontent.com/1639828/135198402-84a2de4a-2c10-408f-890e-62b05e18ba0d.png)
 由于图形中有两条折线，每条折线代表的含义并没有在图形中标识出来，这样我们便不能对两条折线进行区分，为了对两条折线进行区分，我们需要为两条折线分别加上标签。例如：
 ```python
 from matplotlib import pyplot as plt
@@ -122,7 +122,7 @@ plt.legend()
 plt.show()
 ```
 上面的方法通过在 plot 函数中添加参数 label 来实现标签的添加，添加过参数 label 后，我们同样需要调用 legend 函数，否则标签不会显示出来，只不过此时调用 legend 函数不需要传入参数。为折线添加完标签之后的图形如下图所示：
-[image:48BB9CA3-7F74-43FD-B9CE-373283044037-689-0000966F175EA3F8/0D6C4511-5A9F-4D9C-8C63-41BAAB152858.png]
+![image](https://user-images.githubusercontent.com/1639828/135198563-e6ecacca-66da-49c7-bf6d-0ef8fdeef824.png)
 上面图形的样式都是默认的，我们也可以通过参数来设置图形的样式，包括折线的颜色、形状以及粗细等等。例如：
 ```python
 from matplotlib import pyplot as plt
@@ -144,7 +144,7 @@ plt.legend()
 plt.show()
 ```
 上面的代码中，我们通过 color 参数指定图形的颜色，marker 参数指定每个数据点的标记，linestyle 参数指定图形的形状。执行完上述代码后的图形如下图所示：
-[image:24CADC85-EC0F-4838-9664-3A3F98D966DB-689-000097B8BE354532/40E16527-A383-498A-9945-AFCB07437765.png]
+![image](https://user-images.githubusercontent.com/1639828/135198642-981ae950-adbb-4969-961e-7ef7ccf1582d.png)
 color 参数的值也可以是一个 Hex 值，Hex 值由六位十六进制数组成，前两位十六进制数代表红色的强度，中间两位十六进制数绿色的强度，最后两位十六进制数代表蓝色的强度。例如：
 ```python
 from matplotlib import pyplot as plt
@@ -166,7 +166,7 @@ plt.legend()
 plt.show()
 ```
 上面的代码中，通过 Hex 值 `#FF0000` 指定颜色为红色，通过 Hex 值 `#00FF00` 指定颜色为绿色。执行完上述代码后的图形如下图所示：
-[image:43008935-0323-41F0-982B-9BBC9A7801A2-689-0000983DA562F21B/0EB2A12D-9840-41D2-9647-2D0E4CCA9127.png]
+![image](https://user-images.githubusercontent.com/1639828/135198701-5a4024bb-e83a-4a00-a304-bea2e6170651.png)
 我们还可以为图形加上网格线，例如：
 ```python
 from matplotlib import pyplot as plt
@@ -191,7 +191,7 @@ plt.show()
 ```
 上面代码中，调用 grid 函数并传入 True 参数，执行完上述代码后的图形如下图所示：
 
-[image:EC57E89F-1C3C-4B4A-A258-267EDA261D31-689-000098E7A5C1727B/5A1A766E-9443-4AEB-A690-08FBFE7002FB.png]
+![image](https://user-images.githubusercontent.com/1639828/135198756-86c1f76d-e547-4d12-8793-3352e41e87a4.png)
 为了使得图形中的空白区域更少些，我们调用 tight_layout 函数对空白区域进行自动填充，例如：
 ```python
 from matplotlib import pyplot as plt
@@ -217,7 +217,7 @@ plt.tight_layout()
 plt.show()
 ```
 添加 tight_layout 函数的调用后，生成的图形如下图所示：
-[image:C01EF070-E18C-459E-A9CE-7BE589220619-689-00009AB2AB9F6E42/CD319B85-8399-4712-8FA7-CDA23892668C.png]
+![image](https://user-images.githubusercontent.com/1639828/135198803-9cf9c926-66bb-4b5b-814b-670fc5219a15.png)
 上面我们是通过设置参数的方式来改变图形的样式，pyplot 也自带了一些样式供我们直接使用，例如：
 ```python
 from matplotlib import pyplot as plt
@@ -245,7 +245,7 @@ plt.tight_layout()
 plt.show()
 ```
 上述代码使用了 fivethirtyeight 样式，生成的图形如下图所示：
-[image:9DA181D4-3CCC-4D02-B7E1-590457BDBCE4-689-00009AD326C2E172/6A2AB3AB-19D8-434D-A329-1479713CA17F.png]
+![image](https://user-images.githubusercontent.com/1639828/135198853-5b3c5ffd-7650-4d21-a760-b151bd6b30e5.png)
 还有其他的样式，例如 ggplot：
 ```python
 from matplotlib import pyplot as plt
@@ -273,7 +273,7 @@ plt.tight_layout()
 plt.show()
 ```
 生成的图形如下图所示：
-[image:E4661EB7-2ADE-4A11-AD5F-2D826BE80755-689-00009B118805F194/FC7F6759-3048-4EC5-9079-68880BFF7053.png]
+![image](https://user-images.githubusercontent.com/1639828/135198909-561d3e43-e652-4e8c-a2dc-d89fac1aff5a.png)
 ## 4.应用场景
 ### 4.1 适用场景
 同一变量随时间或有序类别而变化的趋势，例如上面的例子中薪水随年龄的变化趋势。
