@@ -5,7 +5,9 @@ date:   2021-09-29 13:09:28 +0800
 categories: 数据分析
 ---
 上节课讲述了 ndarray 的重塑、组合和拆分。
+
 ![image](https://user-images.githubusercontent.com/1639828/135187637-d0254ec9-dca6-434c-b397-b67325da16e8.png)
+
 本节课讲述用于 ndarray 的文件操作。我们可以使用 numpy 提供的方法将 ndarray 存储到文件，还可以从存储 ndarray 的文件中读取 ndarray。
 
 ## 1 单个数组的读写
