@@ -2,7 +2,7 @@
 layout: post
 title:  "第十节提取数据"
 date:   2021-09-29 17:09:28 +0800
-categories: jekyll update
+categories: 数据分析
 ---
 上节课我们讲述了如何查看数据。
 
